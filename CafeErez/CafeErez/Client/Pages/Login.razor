@@ -1,0 +1,39 @@
+﻿@page "/"
+@layout MainLayout
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Login> _localizer
+
+<EditForm Model="@_loginRequest" OnValidSubmit="SubmitAsync">
+    <MudGrid>
+        <DataAnnotationsValidator />
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText Typo="Typo.h4">@_localizer["Title"]</MudText>
+            </div>
+        </MudItem>
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText>@_localizer["Description"]</MudText>
+            </div>
+        </MudItem>
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText>@_localizer["Don't have an account?"] <MudLink Href="/register">@_localizer["Register here"]</MudLink></MudText>
+            </div>
+        </MudItem>
+        <MudItem xs="12">
+            <MudTextField T="string" Label="@_localizer["E-mail"]" Variant="Variant.Outlined"
+                          @bind-Value="_loginRequest.Email" For="@(() => _loginRequest.Email)" />
+        </MudItem>
+        <MudItem xs="12">
+            <MudTextField Label="@_localizer["Password"]" Variant="Variant.Outlined"
+                          @bind-Value="_loginRequest.Password" For="@(() => _loginRequest.Password)"
+                          InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
+        </MudItem>
+        <MudItem xs="12" Class="d-flex justify-space-between align-center">
+            <MudCheckBox T="bool" Label="@_localizer["Remember me?"]" Color="Color.Primary" Class="ml-n1"></MudCheckBox> <MudLink Href="/account/forgot-password">@_localizer["Forgot password?"]</MudLink>
+        </MudItem>
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width: 100%;">@_localizer["Sign In"]</MudButton>
+        </MudItem>
+    </MudGrid>
+</EditForm>

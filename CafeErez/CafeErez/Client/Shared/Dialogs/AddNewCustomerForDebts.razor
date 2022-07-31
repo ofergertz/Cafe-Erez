@@ -1,0 +1,38 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<AddNewCustomerForDebts> localizer
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+            @localizer["Add Customer"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField Label="First name" HelperText="Max. 8 characters"
+                              @bind-Value="NewCustomer.FirstName" For="@(() => NewCustomer.FirstName)"/>
+        <MudTextField Label="Last name" HelperText="Max. 8 characters"
+                              @bind-Value="NewCustomer.LastName" For="@(() => NewCustomer.LastName)"/>
+        <MudTextField Label="PhoneNumber" HelperText="Max. 8 characters"
+                              @bind-Value="NewCustomer.PhoneNumber" For="@(() => NewCustomer.PhoneNumber)"/>
+            <MudTextField Label="Pais" HelperText="Max. 8 characters"
+                              @bind-Value="NewCustomer.CustomerDebts.PaisDebts" For="@(() => NewCustomer.CustomerDebts.PaisDebts)"/>
+                                      <MudTextField Label="Winner" HelperText="Max. 8 characters"
+                              @bind-Value="NewCustomer.CustomerDebts.WinnerDebts" For="@(() => NewCustomer.CustomerDebts.WinnerDebts)"/>
+                                      <MudTextField Label="Store" HelperText="Max. 8 characters"
+                              @bind-Value="NewCustomer.CustomerDebts.StoreDebts" For="@(() => NewCustomer.CustomerDebts.StoreDebts)"/>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["Cancel"]</MudButton>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Submit">@localizer["Add"]</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public Customer NewCustomer { get; set; }
+
+    void Submit()
+    {
+        MudDialog.Close(DialogResult.Ok(NewCustomer));
+    }
+    void Cancel() => MudDialog.Cancel();
+}

@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CafeErez.Server", "CafeErez\Server\CafeErez.Server.csproj", "{9CF5B256-7790-4C07-99AC-CF9EF307E98C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CafeErez.Client", "CafeErez\Client\CafeErez.Client.csproj", "{6FD2F66A-8756-4E95-BBBB-FE4905E40493}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CafeErez.Shared", "CafeErez\Shared\CafeErez.Shared.csproj", "{587D883B-F088-4DF2-B14F-8B76CF0A7EB9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessService", "BusinessService\BusinessService.csproj", "{A126443D-CD5F-43FD-ADC8-66CA1722DE25}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{1FA46604-FCB0-4212-94F0-226E83A63CFC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessComponents", "BusinessComponents\BusinessComponents.csproj", "{5660D5A1-5241-4D53-8693-D6DB8A29D580}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL.Connectivity", "DAL.Connectivity\DAL.Connectivity.csproj", "{CE5FA4A2-98AE-4F36-949F-E5BEDB35C7AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9CF5B256-7790-4C07-99AC-CF9EF307E98C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CF5B256-7790-4C07-99AC-CF9EF307E98C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CF5B256-7790-4C07-99AC-CF9EF307E98C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CF5B256-7790-4C07-99AC-CF9EF307E98C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FD2F66A-8756-4E95-BBBB-FE4905E40493}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FD2F66A-8756-4E95-BBBB-FE4905E40493}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FD2F66A-8756-4E95-BBBB-FE4905E40493}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FD2F66A-8756-4E95-BBBB-FE4905E40493}.Release|Any CPU.Build.0 = Release|Any CPU
+		{587D883B-F088-4DF2-B14F-8B76CF0A7EB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{587D883B-F088-4DF2-B14F-8B76CF0A7EB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{587D883B-F088-4DF2-B14F-8B76CF0A7EB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{587D883B-F088-4DF2-B14F-8B76CF0A7EB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A126443D-CD5F-43FD-ADC8-66CA1722DE25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A126443D-CD5F-43FD-ADC8-66CA1722DE25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A126443D-CD5F-43FD-ADC8-66CA1722DE25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A126443D-CD5F-43FD-ADC8-66CA1722DE25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FA46604-FCB0-4212-94F0-226E83A63CFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FA46604-FCB0-4212-94F0-226E83A63CFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FA46604-FCB0-4212-94F0-226E83A63CFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FA46604-FCB0-4212-94F0-226E83A63CFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5660D5A1-5241-4D53-8693-D6DB8A29D580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5660D5A1-5241-4D53-8693-D6DB8A29D580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5660D5A1-5241-4D53-8693-D6DB8A29D580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5660D5A1-5241-4D53-8693-D6DB8A29D580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE5FA4A2-98AE-4F36-949F-E5BEDB35C7AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE5FA4A2-98AE-4F36-949F-E5BEDB35C7AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE5FA4A2-98AE-4F36-949F-E5BEDB35C7AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE5FA4A2-98AE-4F36-949F-E5BEDB35C7AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B6E22BDB-D586-402E-8FF4-DE972610CBC5}
+	EndGlobalSection
+EndGlobal

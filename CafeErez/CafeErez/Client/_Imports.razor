@@ -1,0 +1,25 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using CafeErez.Shared.BusinessService
+@using CafeErez.Shared.BusinessService.Authentication
+@using CafeErez.Shared.BusinessService.Customer.Handlers
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.JSInterop
+@using CafeErez.Client
+@using CafeErez.Client.Shared
+@using MudBlazor
+@using CafeErez.Shared.Model.Customer;
+@using Blazored;
+@using Blazored.Modal;  
+@using Blazored.Modal.Services;
+@inject ISnackbar _snackBar
+@inject ICustomerHandler _customerHandler
+@inject NavigationManager _navigationManager
+@inject IAuthenticationManager  _authenticationManager
+@inject IModalService _modal  
+@inject IDialogService _dialogService
+

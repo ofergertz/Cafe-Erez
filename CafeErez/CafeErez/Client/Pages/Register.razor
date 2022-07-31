@@ -1,0 +1,35 @@
+﻿@page "/Register"
+
+@using System.ComponentModel.DataAnnotations
+
+<EditForm Model="@_registerRequest" OnValidSubmit="OnValidSubmit">
+<DataAnnotationsValidator/>
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudCard>
+            <MudCardContent>
+                <MudTextField Label="First name" HelperText="Max. 8 characters"
+                              @bind-Value="_registerRequest.FirstName" For="@(() => _registerRequest.FirstName)"/>
+                                <MudTextField Label="Last name" HelperText="Max. 8 characters"
+                              @bind-Value="_registerRequest.LastName" For="@(() => _registerRequest.LastName)"/>
+                              <MudTextField Label="UserName" HelperText="Max. 8 characters"
+                              @bind-Value="_registerRequest.UserName" For="@(() => _registerRequest.UserName)"/>
+                              <MudTextField Label="Email" Class="mt-3"
+                              @bind-Value="_registerRequest.Email" For="@(() => _registerRequest.Email)"/>
+                <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+                              @bind-Value="_registerRequest.Password" For="@(() => _registerRequest.Password)" InputType="InputType.Password"/>
+                <MudTextField Label="Password" HelperText="Repeat the password" Class="mt-3"
+                              @bind-Value="_registerRequest.Password2" For="@(() => _registerRequest.Password2)" InputType="InputType.Password"/>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>   
+    <MudItem xs="12">
+        <MudText Typo="Typo.body2" Align="Align.Center">
+            Fill out the form correctly to see the success message.
+        </MudText>
+    </MudItem>
+</MudGrid>
+</EditForm>
