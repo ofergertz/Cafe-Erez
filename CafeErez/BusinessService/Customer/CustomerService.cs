@@ -24,7 +24,7 @@ namespace BusinessService.Customer
 
         public async Task<CafeErez.Shared.Model.Customer.Customer> GetCustomerById(int id)
         {
-            return await _db.Customer.FirstOrDefaultAsync(x => x.Id == id);
+            return await _db.Customer.FirstOrDefaultAsync(x => x.CustomerId == id);
         }
 
         public async Task<IServiceWrapper<List<CafeErez.Shared.Model.Customer.Customer>>> GetCustomersAsync()
@@ -33,11 +33,11 @@ namespace BusinessService.Customer
             return await ServiceWrapper<List<CafeErez.Shared.Model.Customer.Customer>>.SuccessAsync(customers);
         }
 
-        public async Task<CafeErez.Shared.Model.Customer.Customer> SaveCustomer(CafeErez.Shared.Model.Customer.Customer customer)
+        public async Task<IServiceWrapper<CafeErez.Shared.Model.Customer.Customer>> SaveCustomer(CafeErez.Shared.Model.Customer.Customer customer)
         {
             var customerSaved = _db.Customer.AddAsync(customer).GetAwaiter().GetResult();
             await _db.SaveChangesAsync();
-            return customerSaved.Entity;
+            return await ServiceWrapper<CafeErez.Shared.Model.Customer.Customer>.SuccessAsync(customerSaved.Entity);
         }
 
         public async Task<CafeErez.Shared.Model.Customer.Customer> UpdateCustomer(CafeErez.Shared.Model.Customer.Customer customer)

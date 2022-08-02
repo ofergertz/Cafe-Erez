@@ -1,0 +1,43 @@
+﻿@page "/CustomerDiary"
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CustomerDiary> _localizer
+
+<MudStack Class="pa-3 ma-3" AlignItems="AlignItems.Start"  Row="true">
+    <MudFab Class="pr-5 mr-15" @onclick="AddAction" Label="@_localizer["Add Action"]" Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" />
+    <MudSelect  Class="pl-15 ml-5" ValueChanged="OnCustomerSelected" T="Customer" Label=@_localizer["Select Existing Customer"] AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" Clearable>
+        @foreach (var customer in existingCustomers)
+        {
+           <MudSelectItem T="Customer" Value="@customer">@GetCustomerDetails(customer)</MudSelectItem>       
+        }
+    </MudSelect>
+</MudStack>
+<MudTable Elevation="25" Items="customers" Filter="new Func<Customer, bool>(Search)" @bind-customer="customer">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">@_localizer["Customers Diary"]</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="@_localizer["Search for Customers..."]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>@_localizer["First Name"]</MudTh>
+        <MudTh>@_localizer["Last Name"]</MudTh>
+        <MudTh>@_localizer["Pais"]</MudTh>
+        <MudTh>@_localizer["Winner"]</MudTh>
+        <MudTh>@_localizer["Store"]</MudTh>
+        <MudTh>@_localizer["Total"]</MudTh>
+        <MudTh>@_localizer["Comments"]</MudTh>
+        <MudTh>@_localizer["Date"]</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="FirstName">@context.FirstName</MudTd>
+        <MudTd DataLabel="LastName">@context.LastName</MudTd>
+        <MudTd DataLabel="Pais">@context.CustomerDebts.PaisDebts</MudTd>
+        <MudTd DataLabel="Winner">@context.CustomerDebts.WinnerDebts</MudTd>
+        <MudTd DataLabel="Store">@context.CustomerDebts.StoreDebts</MudTd>
+        <MudTd DataLabel="Total">@GetTotals(context)</MudTd>
+        <MudTd DataLabel="Comments">@context.CustomerDebts.Comments</MudTd>
+        <MudTd DataLabel="Date">@GetActionDate(context)</MudTd>
+    </RowTemplate>
+
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new int[]{10,15,20}" />
+    </PagerContent>
+</MudTable>

@@ -4,10 +4,11 @@ using CafeErez.Shared.Model.Customer;
 using MudBlazor;
 using System.Net.Http;
 
-namespace CafeErez.Client.Pages
+namespace CafeErez.Client.Pages.CustomerScreen
 {
     public partial class Customers
     {
+        private bool showCustomerDairy = false;
         private string searchString = "";
         private Customer customer = new Customer();
         private List<Customer> customers = new List<Customer>();
@@ -61,7 +62,7 @@ namespace CafeErez.Client.Pages
 
         private async Task Edit(int id)
         {
-            customer = customers.FirstOrDefault(c => c.Id == id);
+            customer = customers.FirstOrDefault(c => c.CustomerId == id);
             var parameters = new DialogParameters
             {
                 { nameof(Shared.Dialogs.EditCustomerDetails.UpdatedCustomer), customer }
@@ -98,6 +99,12 @@ namespace CafeErez.Client.Pages
             await _customerHandler.DeleteCustomer(customerId);
             customers = await GetCustomers();
             StateHasChanged();
+        }
+
+        private async Task GetCustomerDairy(int customerId)
+        {
+
+            showCustomerDairy = !showCustomerDairy;
         }
 
         private async Task Delete(int id)

@@ -2,17 +2,18 @@
 @layout MainLayout
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Login> _localizer
 
+    <MudButton OnClick=Fill>Fill details</MudButton>
 <EditForm Model="@_loginRequest" OnValidSubmit="SubmitAsync">
     <MudGrid>
         <DataAnnotationsValidator />
         <MudItem xs="12">
             <div class="d-flex justify-center">
-                <MudText Typo="Typo.h4">@_localizer["Title"]</MudText>
+                <MudText Typo="Typo.h4">@_localizer["Login Screen"]</MudText>
             </div>
         </MudItem>
         <MudItem xs="12">
             <div class="d-flex justify-center">
-                <MudText>@_localizer["Description"]</MudText>
+                <MudText>@_localizer["Login To The System"]</MudText>
             </div>
         </MudItem>
         <MudItem xs="12">

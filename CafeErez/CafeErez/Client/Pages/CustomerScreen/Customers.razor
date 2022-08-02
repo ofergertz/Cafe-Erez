@@ -1,0 +1,71 @@
+﻿@page "/Customers"
+
+<MudFab @onclick="AddCustomer" Label="Add Customer" Class="pa-4 ma-4" Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" />
+<MudTable Elevation="25" Items="customers" Filter="new Func<Customer, bool>(Search)" @bind-customer="customer">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Customers Debts</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search for Customers..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh></MudTh>
+        <MudTh>First Name</MudTh>
+        <MudTh>Last Name</MudTh>
+        <MudTh>Pais</MudTh>
+        <MudTh>Winner</MudTh>
+        <MudTh>Store</MudTh>
+        <MudTh>Total</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd> <MudIconButton Icon="@Icons.Filled.ArrowRight" @onclick="@(()=>GetCustomerDairy(@context.CustomerId))" ></MudIconButton></MudTd>
+        <MudTd DataLabel="FirstName">@context.FirstName</MudTd>
+        <MudTd DataLabel="LastName">@context.LastName</MudTd>
+        <MudTd DataLabel="Pais">@context.CustomerDebts.PaisDebts</MudTd>
+        <MudTd DataLabel="Winner">@context.CustomerDebts.WinnerDebts</MudTd>
+        <MudTd DataLabel="Store">@context.CustomerDebts.StoreDebts</MudTd>
+        <MudTd DataLabel="Total">@GetTotals(context)</MudTd>
+        <MudTd DataLabel="">
+            <MudFab @onclick="@(()=>Edit(@context.CustomerId))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+            <MudFab @onclick="@(()=>Delete(@context.CustomerId))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+    </RowTemplate>
+    @*<ChildRowContent>
+		@if (showCustomerDairy)
+				{
+  <MudTr>
+   <td colspan="4">
+	<MudCard Elevation="0">
+	 <MudCardHeader>
+	  <CardHeaderContent>
+	   <MudText Typo="Typo.body1">Address Details for <strong>@context.FirstName</strong></MudText>
+	  </CardHeaderContent>
+	 </MudCardHeader>
+	 <MudCardContent Class="pa-0">
+	  <MudTable Items="@context.LastName" Context="AddressContext" Hover="true" Breakpoint="Breakpoint.Sm" Elevation="0">
+	   <ColGroup>
+		<col />
+		<col />
+		<col style="width:200px;" />
+	   </ColGroup>
+	   <HeaderContent>
+		<MudTh>Address Line 1</MudTh>
+		<MudTh>Address Line 2</MudTh>
+		<MudTh>Postal Code</MudTh>
+	   </HeaderContent>
+	   <RowTemplate>
+		<MudTd DataLabel="Address Line 1">@context.PhoneNumber</MudTd>
+		<MudTd DataLabel="Address Line 2">@context.PhoneNumber</MudTd>
+		<MudTd DataLabel="Postal Code">@context.PhoneNumber</MudTd>
+	   </RowTemplate>
+	  </MudTable>
+	 </MudCardContent>
+	</MudCard>
+   </td>
+  </MudTr>
+		}
+	</ChildRowContent>*@
+
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new int[]{10,15,20}" />
+    </PagerContent>
+</MudTable>

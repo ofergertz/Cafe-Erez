@@ -1,14 +1,26 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazor.Flags
+@using CafeErez.Shared.Infrastructure.Localization
+@inherits LayoutComponentBase
+@inject Microsoft.Extensions.Localization.IStringLocalizer<MainLayout> _localizer
 
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
+<MudRTLProvider RightToLeft="@_rightToLeft">
 <MudLayout>
     <MudAppBar>
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        Welcome to Cafe Erez
+        @_localizer["Welcome to Cafe Erez"]
+        <MudSpacer />
+        <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
+            @foreach (var language in LocalizationConstants.SupportedLanguages)
+            {
+                <MudMenuItem OnClick="(()=> ChangeLanguageAsync(language))">@_localizer[language.DisplayName]</MudMenuItem>
+            }
+        </MudMenu>
     </MudAppBar>
+        
     <MudDrawer @bind-Open="@_drawerOpen">
         <NavMenu/>
     </MudDrawer>
@@ -18,11 +30,4 @@
         </MudContainer>
     </MudMainContent>
 </MudLayout>
-@code {
-    bool _drawerOpen = false;
-
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-}
+</MudRTLProvider>

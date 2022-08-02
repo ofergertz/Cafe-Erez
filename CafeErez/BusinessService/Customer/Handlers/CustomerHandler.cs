@@ -44,6 +44,11 @@ namespace BusinessService.Customer.Handlers
             return await response.ToResult<CafeErez.Shared.Model.Customer.Customer>();
         }
 
+        public Task<IServiceWrapper<CafeErez.Shared.Model.Customer.Customer>> SaveCustomerDiary(CafeErez.Shared.Model.Customer.Customer Customer, DateTime ActionDate)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IServiceWrapper<CafeErez.Shared.Model.Customer.Customer>> UpdateCustomer(CafeErez.Shared.Model.Customer.Customer Customer)
         {
             var response = await _httpClient.PostAsJsonAsync(Constants.Customers.UpdateCustomer, Customer);

@@ -9,11 +9,12 @@ namespace CafeErez.Shared.Model.Customer
 {
     public class CustomerDebts
     {
-        public int Id { get; set; }
+        public int CustomerDebtsId { get; set; }
         public string WinnerDebts { get; set; } = "0";
         public string PaisDebts { get; set; } = "0";
         public string StoreDebts { get; set; } = "0";
+        public string Comments { get; set; } = "";
         [JsonIgnore]
-        public Customer? Customer { get; set; } 
+        public List<Customer> Customers { get; set; } = new List<Customer> { };
     }
 }

@@ -69,7 +69,7 @@ namespace BusinessComponents.DatabaseSeeder
                 var customer2 = new Customer("Erez", "Gertz", "0508972804");
                 var customer3 = new Customer("Tomer", "Gertz", "0507500317");
 
-                if (_db.Customer.Count() > 0 && _db.Customer.Where(x => x.Id != 0).First() != null)
+                if (_db.Customer.Count() > 0 && _db.Customer.Where(x => x.CustomerId != 0).First() != null)
                     return;
 
                 await _db.Customer.AddRangeAsync(new Customer[] { customer, customer2, customer3 });

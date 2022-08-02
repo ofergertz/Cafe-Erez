@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CafeErez.Shared.Model.Customer
 {
@@ -20,10 +18,22 @@ namespace CafeErez.Shared.Model.Customer
             PhoneNumber = phoneNumber;
         }
 
-        public int Id { get; set; }
+        public int CustomerId { get; set; }
+
+        [Required]
+        [StringLength(8, ErrorMessage = "FirstName length can't be more than 8.")]
         public string FirstName { get; set; }
+
+        [Required]
+        [StringLength(8, ErrorMessage = "LastName length can't be more than 8.")]
         public string LastName { get; set; }
+
+        [Required]
+        [StringLength(10, ErrorMessage = "PhoneNumber length can't be less/more than 10.", MinimumLength = 10)]
         public string PhoneNumber { get; set; }
+
         public CustomerDebts CustomerDebts { get; set; } = new();
+
+        public List<CustomerDiary> CustomerDiaries { get; set; } = new();
     }
 }

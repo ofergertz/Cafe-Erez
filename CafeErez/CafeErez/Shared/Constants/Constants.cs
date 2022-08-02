@@ -35,5 +35,11 @@ namespace CafeErez.Shared.Constants
         {
             public const string DefaultPassword = "Aa123456!";
         }
+
+        public static class StorageConstants
+        {
+            public const string LocalPreference = "LocalPreference";
+        }
+
     }
 }

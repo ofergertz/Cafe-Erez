@@ -21,6 +21,10 @@ builder.Services.AddIdentity<User, AppRole>(
         options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Resources";
+}); 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

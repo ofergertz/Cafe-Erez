@@ -7,22 +7,22 @@
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudTextField Label="First name" HelperText="Max. 8 characters"
+        <MudTextField Label=@localizer["First Name"] HelperText=@localizer["Max. 8 characters"]
                               @bind-Value="UpdatedCustomer.FirstName" For="@(() => UpdatedCustomer.FirstName)"/>
-        <MudTextField Label="Last name" HelperText="Max. 8 characters"
+        <MudTextField Label=@localizer["Last Name"] HelperText=@localizer["Max. 8 characters"]
                               @bind-Value="UpdatedCustomer.LastName" For="@(() => UpdatedCustomer.LastName)"/>
-        <MudTextField Label="PhoneNumber" HelperText="Max. 8 characters"
+        <MudTextField Label=@localizer["PhoneNumber"] HelperText=@localizer["Exactly 10 characters"]
                               @bind-Value="UpdatedCustomer.PhoneNumber" For="@(() => UpdatedCustomer.PhoneNumber)"/>
-        <MudTextField Label="Pais" HelperText="Max. 8 characters"
+        <MudTextField Label=@localizer["Pais"]
                               @bind-Value="UpdatedCustomer.CustomerDebts.PaisDebts" For="@(() => UpdatedCustomer.CustomerDebts.PaisDebts)"/>
-        <MudTextField Label="Winner" HelperText="Max. 8 characters"
+        <MudTextField Label=@localizer["Winner"]
                               @bind-Value="UpdatedCustomer.CustomerDebts.WinnerDebts" For="@(() => UpdatedCustomer.CustomerDebts.WinnerDebts)"/>
-        <MudTextField Label="Store" HelperText="Max. 8 characters"
+        <MudTextField Label=@localizer["Store"]
                               @bind-Value="UpdatedCustomer.CustomerDebts.StoreDebts" For="@(() => UpdatedCustomer.CustomerDebts.StoreDebts)"/>    
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">@localizer["Cancel"]</MudButton>
-        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="Submit">@localizer["Confirm"]</MudButton>
+        <MudButton Color="Color.Info" Variant="Variant.Filled" OnClick="Submit">@localizer["Confirm"]</MudButton>
     </DialogActions>
 </MudDialog>
 @code {

@@ -2,7 +2,7 @@
 using CafeErez.Shared.Model.Identity;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace CafeErez.Client.Pages
+namespace CafeErez.Client.Pages.Authentication
 {
     public partial class Register
     {

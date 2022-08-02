@@ -1,0 +1,46 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<AddNewCustomerForDebts> localizer
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+            @localizer["Add/Edit Customer"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField Label="First name" HelperText="Max. 8 characters"
+                              @bind-Value="NewCustomer.FirstName" For="@(() => NewCustomer.FirstName)"/>
+        <MudTextField Label="Last name" HelperText="Max. 8 characters"
+                              @bind-Value="NewCustomer.LastName" For="@(() => NewCustomer.LastName)"/>
+        <MudTextField Label="PhoneNumber" HelperText="Max. 8 characters"
+                              @bind-Value="NewCustomer.PhoneNumber" For="@(() => NewCustomer.PhoneNumber)"/>
+       <MudTextField Label="Pais" 
+                              @bind-Value="pais" For="@(() => pais)"/>
+       <MudTextField Label="Winner" 
+                              @bind-Value="winner" For="@(() => winner)"/>
+       <MudTextField Label="Store" 
+                              @bind-Value="store" For="@(() => store)"/>
+       <MudTextField Label="Comments" 
+                              @bind-Value="NewCustomer.CustomerDebts.Comments" For="@(() => NewCustomer.CustomerDebts.Comments)"/>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@localizer["Cancel"]</MudButton>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Submit">@localizer["Add"]</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    string pais { get; set; } = "0";
+    string winner { get; set; } = "0";
+    string store { get; set; } = "0";
+    [Parameter] public Customer NewCustomer { get; set; }
+
+    void Submit()
+    {
+        NewCustomer.CustomerDebts.PaisDebts = pais;
+        NewCustomer.CustomerDebts.StoreDebts = store;
+        NewCustomer.CustomerDebts.WinnerDebts = winner;
+        MudDialog.Close(DialogResult.Ok(NewCustomer));
+    }
+    void Cancel() => MudDialog.Cancel();
+}

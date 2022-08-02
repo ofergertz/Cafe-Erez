@@ -17,12 +17,12 @@ namespace BusinessService
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<AppRole> _roleManagers;
 
-        public IdentityService(/*IStringLocalizer<IdentityService> localizer,*/
+        public IdentityService(IStringLocalizer<IdentityService> localizer,
             IServiceProvider serviceProvider,
             UserManager<User> userManagers, RoleManager<AppRole> roleManagers, 
             IUsersHandler userHandler)
         {
-            //_localizer = localizer;
+            _localizer = localizer;
             _serviceProvider = serviceProvider;
             _userManager = userManagers;
             _roleManagers = roleManagers;

@@ -1,28 +1,28 @@
-﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<AddNewCustomerForDebts> localizer
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<AddNewCustomerForDebts> _localizer
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
             <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
-            @localizer["Add Customer"]
+            @_localizer["Add Customer"]
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudTextField Label="First name" HelperText="Max. 8 characters"
+        <MudTextField Label=@_localizer["First name"] HelperText=@_localizer["Max. 8 characters"]
                               @bind-Value="NewCustomer.FirstName" For="@(() => NewCustomer.FirstName)"/>
-        <MudTextField Label="Last name" HelperText="Max. 8 characters"
+        <MudTextField Label=@_localizer["Last name"] HelperText=@_localizer["Max. 8 characters"]
                               @bind-Value="NewCustomer.LastName" For="@(() => NewCustomer.LastName)"/>
-        <MudTextField Label="PhoneNumber" HelperText="Max. 8 characters"
+        <MudTextField Label=@_localizer["PhoneNumber"] HelperText=@_localizer["Max. 8 characters"]
                               @bind-Value="NewCustomer.PhoneNumber" For="@(() => NewCustomer.PhoneNumber)"/>
-            <MudTextField Label="Pais" HelperText="Max. 8 characters"
+        <MudTextField Label=@_localizer["Pais"] HelperText=@_localizer["Max. 8 characters"]
                               @bind-Value="NewCustomer.CustomerDebts.PaisDebts" For="@(() => NewCustomer.CustomerDebts.PaisDebts)"/>
-                                      <MudTextField Label="Winner" HelperText="Max. 8 characters"
+        <MudTextField Label=@_localizer["Winner"] HelperText=@_localizer["Max. 8 characters"]
                               @bind-Value="NewCustomer.CustomerDebts.WinnerDebts" For="@(() => NewCustomer.CustomerDebts.WinnerDebts)"/>
-                                      <MudTextField Label="Store" HelperText="Max. 8 characters"
+                                      <MudTextField Label=@_localizer["Store"] HelperText=@_localizer["Max. 8 characters"]
                               @bind-Value="NewCustomer.CustomerDebts.StoreDebts" For="@(() => NewCustomer.CustomerDebts.StoreDebts)"/>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">@localizer["Cancel"]</MudButton>
-        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Submit">@localizer["Add"]</MudButton>
+        <MudButton OnClick="Cancel">@_localizer["Cancel"]</MudButton>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Submit">@_localizer["Add"]</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
