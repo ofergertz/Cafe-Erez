@@ -1,59 +1,69 @@
-﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<DeleteCustomerFromTable> localizer
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<DeleteCustomerFromTable> _localizer
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
             <MudIcon Icon="@Icons.Material.Filled.Delete" Class="mr-3 mb-n1" />
-            @localizer["Edit Customer"]
+            @_localizer["Edit Customer"]
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudTextField Label=@localizer["First Name"] HelperText=@localizer["Max. 8 characters"]
-                              @bind-Value="UpdatedCustomer.FirstName" For="@(() => UpdatedCustomer.FirstName)"/>
-        <MudTextField Label=@localizer["Last Name"] HelperText=@localizer["Max. 8 characters"]
-                              @bind-Value="UpdatedCustomer.LastName" For="@(() => UpdatedCustomer.LastName)"/>
-        <MudTextField Label=@localizer["PhoneNumber"] HelperText=@localizer["Exactly 10 characters"]
-                              @bind-Value="UpdatedCustomer.PhoneNumber" For="@(() => UpdatedCustomer.PhoneNumber)"/>
-        <MudTextField Label=@localizer["Pais"]
-                              @bind-Value="UpdatedCustomer.CustomerDebts.PaisDebts" For="@(() => UpdatedCustomer.CustomerDebts.PaisDebts)"/>
-        <MudTextField Label=@localizer["Winner"]
-                              @bind-Value="UpdatedCustomer.CustomerDebts.WinnerDebts" For="@(() => UpdatedCustomer.CustomerDebts.WinnerDebts)"/>
-        <MudTextField Label=@localizer["Store"]
-                              @bind-Value="UpdatedCustomer.CustomerDebts.StoreDebts" For="@(() => UpdatedCustomer.CustomerDebts.StoreDebts)"/>    
+        <MudTextField Label=@_localizer["First Name"] HelperText=@_localizer["Max. 8 characters"]
+                              @bind-Value="NewCustomerDebts.Item1.FirstName" For="@(() => 
+                                           NewCustomerDebts.Item1.FirstName)"/>
+        <MudTextField Label=@_localizer["Last Name"] HelperText=@_localizer["Max. 8 characters"]
+                              @bind-Value="NewCustomerDebts.Item1.LastName" For="@(() => 
+                                           NewCustomerDebts.Item1.LastName)"/>
+        <MudTextField Label=@_localizer["PhoneNumber"] HelperText=@_localizer["Exactly 10 characters"]
+                              @bind-Value="NewCustomerDebts.Item1.PhoneNumber" For="@(() => 
+                                           NewCustomerDebts.Item1.PhoneNumber)"/>
+        <MudTextField Label=@_localizer["Action"] HelperText=@_localizer["Pais/Store/Winner"]
+                              @bind-Value="NewCustomerDebts.Item2.Action" For="@(() => NewCustomerDebts.Item2.Action)"/>
+        <MudTextField Label=@_localizer["Action Amount"] 
+                              @bind-Value="NewCustomerDebts.Item2.ActionAmount" For="@(() => NewCustomerDebts.Item2.ActionAmount)"/>
+        <MudTextField Label=@_localizer["Comments"]
+                              @bind-Value="NewCustomerDebts.Item2.Comments" For="@(() => NewCustomerDebts.Item2.Comments)"/>
+
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">@localizer["Cancel"]</MudButton>
-        <MudButton Color="Color.Info" Variant="Variant.Filled" OnClick="Submit">@localizer["Confirm"]</MudButton>
+        <MudButton OnClick="Cancel">@_localizer["Cancel"]</MudButton>
+        <MudButton Color="Color.Info" Variant="Variant.Filled" OnClick="Submit">@_localizer["Confirm"]</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    [Parameter] public Customer UpdatedCustomer { get; set; }
+    [Parameter] public Tuple<Customer, CustomerDebts> NewCustomerDebts { get; set; }
 
     void Submit()
     {
-        if(InputOfEditCustomerFormIsValidated())
-            MudDialog.Close(DialogResult.Ok(UpdatedCustomer));
+        if (InputOfEditCustomerFormIsValidated())
+        {
+            NewCustomerDebts.Item2.ActionDate = DateTime.UtcNow.ToLocalTime();
+            var existingDebt = NewCustomerDebts.Item1.CustomerDebts.FindLast(x => x.CustomerDebtsId == NewCustomerDebts.Item2.CustomerDebtsId);
+            NewCustomerDebts.Item1.CustomerDebts.Remove(existingDebt);
+            NewCustomerDebts.Item1.CustomerDebts.Add(NewCustomerDebts.Item2);
+            MudDialog.Close(DialogResult.Ok(NewCustomerDebts.Item1));
+        }
     }
     void Cancel() => MudDialog.Cancel();
 
     private bool InputOfEditCustomerFormIsValidated()
     {
-        if (string.IsNullOrEmpty(UpdatedCustomer.FirstName))
+        if (string.IsNullOrEmpty(NewCustomerDebts.Item1.FirstName))
         {
-            _snackBar.Add(localizer["FirstName can't be empty"], Severity.Error);
+            _snackBar.Add(_localizer["FirstName can't be empty"], Severity.Error);
             return false;
         }
 
-        if (string.IsNullOrEmpty(UpdatedCustomer.LastName))
+        if (string.IsNullOrEmpty(NewCustomerDebts.Item1.LastName))
         {
-            _snackBar.Add(localizer["LastName can't be empty"]);
+            _snackBar.Add(_localizer["LastName can't be empty"]);
             return false;
         }
 
-        if (string.IsNullOrEmpty(UpdatedCustomer.PhoneNumber))
+        if (string.IsNullOrEmpty(NewCustomerDebts.Item1.PhoneNumber))
         {
-            _snackBar.Add(localizer["PhoneNumber can't be empty"]);
+            _snackBar.Add(_localizer["PhoneNumber can't be empty"]);
             return false;
         }
 

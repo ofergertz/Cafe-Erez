@@ -23,16 +23,11 @@ namespace DAL.Connectivity
         public DbSet<User> User { get; set; }
         public DbSet<Customer> Customer { get; set; }
         public DbSet<CustomerDebts> CustomerDebts { get; set; }
-        public DbSet<CustomerDiary> CustomerDiary { get; set; }
+       // public DbSet<CustomerDiary> CustomerDiary { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            //builder.Entity<Customer>()
-            //.HasOne(a => a.CustomerDebts)
-            //.WithOne(a => a.Customer)
-            //.HasForeignKey<CustomerDebts>(c => c.Id);
-
             builder.Entity<User>(entity =>
             {
                 entity.ToTable(name: "Users", "dbo");

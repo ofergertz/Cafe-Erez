@@ -14,5 +14,6 @@ namespace CafeErez.Shared.Model.Customer
         public string ActionAmount { get; set; }
         public string Comments { get; set; } = "";
         public DateTime? ActionDate { get; set; }
+        List<Customer> Customers { get; set; } = new List<Customer>();
     }
 }

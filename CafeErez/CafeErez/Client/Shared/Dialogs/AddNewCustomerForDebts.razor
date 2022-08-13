@@ -11,14 +11,14 @@
                               @bind-Value="NewCustomer.FirstName" For="@(() => NewCustomer.FirstName)"/>
         <MudTextField Label=@_localizer["Last name"] HelperText=@_localizer["Max. 8 characters"]
                               @bind-Value="NewCustomer.LastName" For="@(() => NewCustomer.LastName)"/>
-        <MudTextField Label=@_localizer["PhoneNumber"] HelperText=@_localizer["Max. 8 characters"]
+        <MudTextField Label=@_localizer["PhoneNumber"] HelperText=@_localizer["No More/Less than 10 characters"]
                               @bind-Value="NewCustomer.PhoneNumber" For="@(() => NewCustomer.PhoneNumber)"/>
-        <MudTextField Label=@_localizer["Pais"] HelperText=@_localizer["Max. 8 characters"]
-                              @bind-Value="NewCustomer.CustomerDebts.PaisDebts" For="@(() => NewCustomer.CustomerDebts.PaisDebts)"/>
-        <MudTextField Label=@_localizer["Winner"] HelperText=@_localizer["Max. 8 characters"]
-                              @bind-Value="NewCustomer.CustomerDebts.WinnerDebts" For="@(() => NewCustomer.CustomerDebts.WinnerDebts)"/>
-                                      <MudTextField Label=@_localizer["Store"] HelperText=@_localizer["Max. 8 characters"]
-                              @bind-Value="NewCustomer.CustomerDebts.StoreDebts" For="@(() => NewCustomer.CustomerDebts.StoreDebts)"/>
+         <MudTextField Label=@_localizer["Action"] HelperText=@_localizer["Pais/Store/Winner"]
+                              @bind-Value="NewCustomerDebts.Action" For="@(() => NewCustomerDebts.Action)"/>
+        <MudTextField Label=@_localizer["Action Amount"] 
+                              @bind-Value="NewCustomerDebts.ActionAmount" For="@(() => NewCustomerDebts.ActionAmount)"/>
+        <MudTextField Label=@_localizer["Comments"]
+                              @bind-Value="NewCustomerDebts.Comments" For="@(() => NewCustomerDebts.Comments)"/>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">@_localizer["Cancel"]</MudButton>
@@ -29,9 +29,13 @@
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     [Parameter] public Customer NewCustomer { get; set; }
+    [Parameter] public CustomerDebts NewCustomerDebts { get; set; } = new CustomerDebts();
 
     void Submit()
     {
+        NewCustomerDebts.ActionDate = DateTime.UtcNow.ToLocalTime();
+        NewCustomer.CustomerDebts.Clear();
+        NewCustomer.CustomerDebts.Add(NewCustomerDebts);
         MudDialog.Close(DialogResult.Ok(NewCustomer));
     }
     void Cancel() => MudDialog.Cancel();

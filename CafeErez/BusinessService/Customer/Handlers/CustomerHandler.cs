@@ -28,7 +28,7 @@ namespace BusinessService.Customer.Handlers
 
         public async Task<IServiceWrapper<CafeErez.Shared.Model.Customer.Customer>> GetCustomerById(int Id)
         {
-            var response = await _httpClient.GetAsync(Constants.Customers.GetCustomerById(Id));
+            var response = await _httpClient.GetAsync(Constants.Customers.GetCustomerById(Id.ToString()));
             return await response.ToResult<CafeErez.Shared.Model.Customer.Customer>();
         }
 

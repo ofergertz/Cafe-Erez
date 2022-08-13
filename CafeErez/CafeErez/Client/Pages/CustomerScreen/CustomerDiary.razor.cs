@@ -9,19 +9,27 @@ namespace CafeErez.Client.Pages.CustomerScreen
         private List<Customer> customers = new List<Customer>();
         private List<Customer> existingCustomers = new List<Customer>();
         private string searchString = "";
-        private Customer customer = new Customer();
-
+        private List<Tuple<Customer,CustomerDebts>> customerDebts = new List<Tuple<Customer, CustomerDebts>>();
 
         protected override async Task OnInitializedAsync()
         {
             existingCustomers = await GetCustomers();
+            var cust = existingCustomers.ToList().Select(x => x).Where(x => x.CustomerDebts.Any()).ToList();
+            customers = cust.Where(x => x.CustomerDebts.Any(y => DateTime.Compare(y.ActionDate.Date, DateTime.UtcNow.ToLocalTime().Date) == 0)).ToList();
+			foreach (var item in customers)
+			{
+                customerDebts.Add(new Tuple<Customer, CustomerDebts>(item, item.CustomerDebts.Last()));
+            }
         }
-        private async Task OnCustomerSelected(Customer value)
+
+        private async Task OnCustomerSelected(Customer customer)
         {
-            customer = value;
+            if (customer == null)
+                return;
+
             var parameters = new DialogParameters
             {
-                { nameof(Shared.Dialogs.AddNewCustomerForDebts.NewCustomer), customer }
+                { nameof(Shared.Dialogs.AddNewCustomerForDiaryDebts.NewCustomer), customer }
             };
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
             var dialog = _dialogService.Show<Shared.Dialogs.AddNewCustomerForDiaryDebts>(_localizer["Add"], parameters, options);
@@ -34,18 +42,7 @@ namespace CafeErez.Client.Pages.CustomerScreen
 
         private string GetCustomerDetails(Customer customer)
         {
-            if (customer.CustomerDebts != null && (!string.IsNullOrEmpty(customer.CustomerDebts.PaisDebts) ||
-                !string.IsNullOrEmpty(customer.CustomerDebts.WinnerDebts) || !string.IsNullOrEmpty(customer.CustomerDebts.StoreDebts)))
-                return customer.FirstName + " " + customer.LastName + " " + _localizer["has own:"] + $" {GetCustomerTotalDebts(customer)}";
-
             return customer.FirstName + " " + customer.LastName;
-        }
-
-        private double GetCustomerTotalDebts(Customer customer)
-        {
-            return Convert.ToDouble(customer.CustomerDebts.PaisDebts) +
-                Convert.ToDouble(customer.CustomerDebts.WinnerDebts) +
-                Convert.ToDouble(customer.CustomerDebts.StoreDebts);
         }
 
         private async Task AddAction()
@@ -64,11 +61,42 @@ namespace CafeErez.Client.Pages.CustomerScreen
 
         private async Task UpdateCustomer(Customer customer)
         {
+            if (customer == null)
+                return;
+
             await _customerHandler.UpdateCustomer(customer);
-            customers.Add(customer);
+            if (!CustomerAlreadyExistInList(customer))
+                customerDebts.Add(new Tuple<Customer, CustomerDebts>(customer, customer.CustomerDebts.Last()));
+            //customers.Add(customer);
             _snackBar.Add(_localizer["Customer Updated."], Severity.Success);
             StateHasChanged();
         }
+
+        private bool CustomerAlreadyExistInList(Customer customer)
+        {
+            return customerDebts.Any(x => x.Item2.CustomerDebtsId == customer.CustomerDebts.Last()?.CustomerDebtsId);
+        }
+
+        private async Task Edit(Tuple<Customer,CustomerDebts> customer)
+        {
+            var parameters = new DialogParameters
+            {
+                { nameof(Shared.Dialogs.EditCustomerDetails.NewCustomerDebts), customer }
+            };
+            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+            var dialog = _dialogService.Show<Shared.Dialogs.EditCustomerDetails>("Edit", parameters, options);
+            var result = await dialog.Result;
+            await UpdateCustomer(result.Data as Customer);
+        }
+
+        private async Task GetDebts(Tuple<Customer,CustomerDebts> tuple)
+		{
+            var customer = await GetCustomerById(tuple.Item1.CustomerId);
+            var sum = customer.CustomerDebts.Sum(x => int.Parse(x.ActionAmount)).ToString();
+            bool? result = await _dialogService.ShowMessageBox(
+         "Total Debts", $"Total debts for {customer.FirstName} {customer.LastName} is: {sum}");
+        }
+
         private async Task AddCustomer(Customer customer)
         {
             var response = await _customerHandler.SaveCustomer(customer);
@@ -79,12 +107,22 @@ namespace CafeErez.Client.Pages.CustomerScreen
             }
 
             _snackBar.Add(_localizer["Customer Saved."], Severity.Success);
-            customers.Add(response.Data);
+            var newCustomer = response.Data as Customer;
+            existingCustomers.Add(newCustomer);
+            customerDebts.Add(new Tuple<Customer, CustomerDebts>(newCustomer,
+                newCustomer.CustomerDebts.Last()));
+            //customers.Add(response.Data as Customer);
             StateHasChanged();
         }
         private async Task<List<Customer>> GetCustomers()
         {
             var customersResult = await _customerHandler.GetCustomers();
+            return customersResult.Data;
+        }
+
+        private async Task<Customer> GetCustomerById(int id)
+        {
+            var customersResult = await _customerHandler.GetCustomerById(id);
             return customersResult.Data;
         }
 
@@ -106,19 +144,22 @@ namespace CafeErez.Client.Pages.CustomerScreen
             //table.ReloadServerData();
         }
 
-        private string GetTotals(Customer customer)
-        {
-            var paisDebts = int.Parse(customer.CustomerDebts.PaisDebts);
-            var winnerDebts = int.Parse(customer.CustomerDebts.WinnerDebts);
-            var storeDebts = int.Parse(customer.CustomerDebts.StoreDebts);
+        //private string GetTotals(Customer customer)
+        //{
+        //    var paisDebts = int.Parse(customer.CustomerDebts.PaisDebts);
+        //    var winnerDebts = int.Parse(customer.CustomerDebts.WinnerDebts);
+        //    var storeDebts = int.Parse(customer.CustomerDebts.StoreDebts);
 
-            var totals = paisDebts + winnerDebts + storeDebts;
-            return totals.ToString();
-        }
+        //    var totals = paisDebts + winnerDebts + storeDebts;
+        //    return totals.ToString();
+        //}
 
-        private string GetActionDate(Customer customer)
+        private string GetActionDate(CustomerDebts customer)
         {
-            return DateTime.UtcNow.ToLocalTime().ToString("dd/MM/yyyy  HH:mm:ss");
+            //customer.CustomerDebts.Last().ActionDate = customer.CustomerDebts?.Last()?.ActionDate ?? DateTime.UtcNow.ToLocalTime().Date;
+
+            //return customer.CustomerDebts.Last().ActionDate.ToString("dd/MM/yyyy  HH:mm:ss");
+            return customer.ActionDate.ToString("dd/MM/yyyy  HH:mm:ss");
         }
     }
 }

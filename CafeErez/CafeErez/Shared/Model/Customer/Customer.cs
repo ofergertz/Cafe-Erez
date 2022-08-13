@@ -32,8 +32,6 @@ namespace CafeErez.Shared.Model.Customer
         [StringLength(10, ErrorMessage = "PhoneNumber length can't be less/more than 10.", MinimumLength = 10)]
         public string PhoneNumber { get; set; }
 
-        public CustomerDebts CustomerDebts { get; set; } = new();
-
-        public List<CustomerDiary> CustomerDiaries { get; set; } = new();
+        public List<CustomerDebts> CustomerDebts { get; set; } = new();
     }
 }

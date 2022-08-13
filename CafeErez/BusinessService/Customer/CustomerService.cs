@@ -14,17 +14,18 @@ namespace BusinessService.Customer
             _db = db;
         }
 
-        public async Task<CafeErez.Shared.Model.Customer.Customer> DeleteCustomer(int id)
+        public async Task<IServiceWrapper<CafeErez.Shared.Model.Customer.Customer>> DeleteCustomer(int id)
         {
             var customerToDelete = await GetCustomerById(id);
-            _db.Customer.Remove(customerToDelete);
+            var custoerDeleted = _db.Customer.Remove(customerToDelete.Data);
             await _db.SaveChangesAsync();
-            return customerToDelete;
+            return await ServiceWrapper<CafeErez.Shared.Model.Customer.Customer>.SuccessAsync(custoerDeleted.Entity);
         }
 
-        public async Task<CafeErez.Shared.Model.Customer.Customer> GetCustomerById(int id)
+        public async Task<IServiceWrapper<CafeErez.Shared.Model.Customer.Customer>> GetCustomerById(int id)
         {
-            return await _db.Customer.FirstOrDefaultAsync(x => x.CustomerId == id);
+            var customer = await _db.Customer.Select(x => x).Where(x => x.CustomerId == id).Include(x=>x.CustomerDebts).FirstAsync();
+            return await ServiceWrapper<CafeErez.Shared.Model.Customer.Customer>.SuccessAsync(customer);
         }
 
         public async Task<IServiceWrapper<List<CafeErez.Shared.Model.Customer.Customer>>> GetCustomersAsync()

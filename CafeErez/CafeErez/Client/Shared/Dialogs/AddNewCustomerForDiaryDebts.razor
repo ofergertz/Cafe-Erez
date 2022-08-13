@@ -1,9 +1,9 @@
-﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<AddNewCustomerForDebts> localizer
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<AddNewCustomerForDebts> _localizer
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
             <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
-            @localizer["Add/Edit Customer"]
+            @_localizer["Add/Edit Customer"]
         </MudText>
     </TitleContent>
     <DialogContent>
@@ -13,18 +13,28 @@
                               @bind-Value="NewCustomer.LastName" For="@(() => NewCustomer.LastName)"/>
         <MudTextField Label="PhoneNumber" HelperText="Max. 8 characters"
                               @bind-Value="NewCustomer.PhoneNumber" For="@(() => NewCustomer.PhoneNumber)"/>
-       <MudTextField Label="Pais" 
+@*       <MudTextField Label="Pais" 
                               @bind-Value="pais" For="@(() => pais)"/>
        <MudTextField Label="Winner" 
                               @bind-Value="winner" For="@(() => winner)"/>
        <MudTextField Label="Store" 
-                              @bind-Value="store" For="@(() => store)"/>
-       <MudTextField Label="Comments" 
-                              @bind-Value="NewCustomer.CustomerDebts.Comments" For="@(() => NewCustomer.CustomerDebts.Comments)"/>
+                              @bind-Value="store" For="@(() => store)"/>*@
+      @* <MudTextField Label=@_localizer["Action"] HelperText=@_localizer["Pais/Store/Winner"]
+                              @bind-Value="NewCustomerDebts.Action" For="@(() => NewCustomerDebts.Action)"/>*@
+    <MudSelect T="string" ValueChanged="OnActionSelected" Label="Action" AnchorOrigin="Origin.BottomCenter">
+        <MudSelectItem Value="@("Winner")" />
+        <MudSelectItem Value="@("Pais")" />
+        <MudSelectItem Value="@("Store")" />
+        <MudSelectItem Value="@("Refund")" />
+    </MudSelect>
+        <MudTextField Label=@_localizer["Action Amount"] 
+                              @bind-Value="NewCustomerDebts.ActionAmount" For="@(() => NewCustomerDebts.ActionAmount)"/>
+       <MudTextField Label=@_localizer["Comments"]
+                              @bind-Value="NewCustomerDebts.Comments" For="@(() => NewCustomerDebts.Comments)"/>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">@localizer["Cancel"]</MudButton>
-        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Submit">@localizer["Add"]</MudButton>
+        <MudButton OnClick="Cancel">@_localizer["Cancel"]</MudButton>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Submit">@_localizer["Add"]</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
@@ -34,12 +44,19 @@
     string winner { get; set; } = "0";
     string store { get; set; } = "0";
     [Parameter] public Customer NewCustomer { get; set; }
+    [Parameter] public CustomerDebts NewCustomerDebts { get; set; } = new CustomerDebts();
 
+    void OnActionSelected(string action)
+    {
+        NewCustomerDebts.Action = action;
+    }
     void Submit()
     {
-        NewCustomer.CustomerDebts.PaisDebts = pais;
-        NewCustomer.CustomerDebts.StoreDebts = store;
-        NewCustomer.CustomerDebts.WinnerDebts = winner;
+        NewCustomerDebts.ActionDate = DateTime.UtcNow.ToLocalTime();
+        NewCustomer.CustomerDebts.Clear();
+        if (NewCustomerDebts.Action == "Refund")
+            NewCustomerDebts.ActionAmount = "-" + NewCustomerDebts.ActionAmount;
+        NewCustomer.CustomerDebts.Add(NewCustomerDebts);
         MudDialog.Close(DialogResult.Ok(NewCustomer));
     }
     void Cancel() => MudDialog.Cancel();

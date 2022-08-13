@@ -23,6 +23,14 @@ namespace CafeErez.Server.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("GetById/{id}")]
+        public async Task<ActionResult> GetCustomerById(string id)
+        {
+            var response = await _customerService.GetCustomerById(int.Parse(id));
+            return Ok(response);
+        }
+
         [HttpPost]
         [Route("Save")]
         public async Task<ActionResult> SaveCustomer(Customer Customer)

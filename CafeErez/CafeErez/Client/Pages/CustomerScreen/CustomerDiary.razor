@@ -10,31 +10,35 @@
         }
     </MudSelect>
 </MudStack>
-<MudTable Elevation="25" Items="customers" Filter="new Func<Customer, bool>(Search)" @bind-customer="customer">
+<MudTable Elevation="25" Items="@customerDebts">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">@_localizer["Customers Diary"]</MudText>
+        <MudText Typo="Typo.h6">@_localizer["Customers Diary"] - @DateTime.UtcNow.ToLocalTime().Date.ToString("dd/MM/yyyy")</MudText>
         <MudSpacer />
         <MudTextField @bind-Value="searchString" Placeholder="@_localizer["Search for Customers..."]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
+        <MudTh></MudTh>
         <MudTh>@_localizer["First Name"]</MudTh>
         <MudTh>@_localizer["Last Name"]</MudTh>
-        <MudTh>@_localizer["Pais"]</MudTh>
-        <MudTh>@_localizer["Winner"]</MudTh>
-        <MudTh>@_localizer["Store"]</MudTh>
-        <MudTh>@_localizer["Total"]</MudTh>
+        <MudTh>@_localizer["Action"]</MudTh>
+        <MudTh>@_localizer["Amount"]</MudTh>
         <MudTh>@_localizer["Comments"]</MudTh>
         <MudTh>@_localizer["Date"]</MudTh>
+        <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="FirstName">@context.FirstName</MudTd>
-        <MudTd DataLabel="LastName">@context.LastName</MudTd>
-        <MudTd DataLabel="Pais">@context.CustomerDebts.PaisDebts</MudTd>
-        <MudTd DataLabel="Winner">@context.CustomerDebts.WinnerDebts</MudTd>
-        <MudTd DataLabel="Store">@context.CustomerDebts.StoreDebts</MudTd>
-        <MudTd DataLabel="Total">@GetTotals(context)</MudTd>
-        <MudTd DataLabel="Comments">@context.CustomerDebts.Comments</MudTd>
-        <MudTd DataLabel="Date">@GetActionDate(context)</MudTd>
+                <MudTd>
+                    <MudFab Class="pr-5 mr-15" @onclick="(() =>GetDebts(context))" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Functions" Size="Size.Small" />
+                </MudTd>
+                <MudTd DataLabel="FirstName">@context.Item1.FirstName</MudTd>
+                <MudTd DataLabel="LastName">@context.Item1.LastName</MudTd>
+                <MudTd DataLabel="Action">@context.Item2.Action</MudTd>
+                <MudTd DataLabel="Amount">@context.Item2.ActionAmount</MudTd>
+                <MudTd DataLabel="Comments">@context.Item2.Comments</MudTd>
+                <MudTd DataLabel="Date">@GetActionDate(context.Item2)</MudTd> 
+                <MudTd>
+                    <MudFab @onclick="@(()=>Edit(context))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+                </MudTd>
     </RowTemplate>
 
     <PagerContent>

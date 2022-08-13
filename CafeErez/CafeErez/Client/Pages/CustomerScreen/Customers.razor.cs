@@ -1,8 +1,5 @@
-﻿
-using CafeErez.Shared.BusinessService;
-using CafeErez.Shared.Model.Customer;
+﻿using CafeErez.Shared.Model.Customer;
 using MudBlazor;
-using System.Net.Http;
 
 namespace CafeErez.Client.Pages.CustomerScreen
 {
@@ -50,27 +47,17 @@ namespace CafeErez.Client.Pages.CustomerScreen
             StateHasChanged();
         }
 
-        private string GetTotals(Customer customer)
-        {
-            var paisDebts = int.Parse(customer.CustomerDebts.PaisDebts);
-            var winnerDebts = int.Parse(customer.CustomerDebts.WinnerDebts);
-            var storeDebts = int.Parse(customer.CustomerDebts.StoreDebts);
-            
-            var totals = paisDebts + winnerDebts + storeDebts;
-            return totals.ToString();
-        }
-
         private async Task Edit(int id)
         {
-            customer = customers.FirstOrDefault(c => c.CustomerId == id);
-            var parameters = new DialogParameters
-            {
-                { nameof(Shared.Dialogs.EditCustomerDetails.UpdatedCustomer), customer }
-            };
-            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<Shared.Dialogs.EditCustomerDetails>("Edit", parameters, options);
-            var result = await dialog.Result;
-            await UpdateCustomer(result.Data as Customer);
+            //customer = customers.FirstOrDefault(c => c.CustomerId == id);
+            //var parameters = new DialogParameters
+            //{
+            //    { nameof(Shared.Dialogs.EditCustomerDetails.UpdatedCustomer), customer }
+            //};
+            //var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+            //var dialog = _dialogService.Show<Shared.Dialogs.EditCustomerDetails>("Edit", parameters, options);
+            //var result = await dialog.Result;
+            //await UpdateCustomer(result.Data as Customer);
         }
 
         private async Task UpdateCustomer(Customer? customer)

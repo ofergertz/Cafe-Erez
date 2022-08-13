@@ -20,9 +20,9 @@ namespace CafeErez.Shared.Constants
             public const string SaveCustomer = "api/customer/Save";
             public const string UpdateCustomer = "api/customer/Update";
             public const string DeleteCustomer = "api/customer/Delete";
-            public static string GetCustomerById(int id)
+            public static string GetCustomerById(string id)
             {
-               return $"api/customer/{id}";
+               return $"api/customer/GetById/{id}";
             }
         }
 
