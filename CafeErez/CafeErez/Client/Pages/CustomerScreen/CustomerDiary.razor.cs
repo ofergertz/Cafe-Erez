@@ -16,9 +16,12 @@ namespace CafeErez.Client.Pages.CustomerScreen
             existingCustomers = await GetCustomers();
             var cust = existingCustomers.ToList().Select(x => x).Where(x => x.CustomerDebts.Any()).ToList();
             customers = cust.Where(x => x.CustomerDebts.Any(y => DateTime.Compare(y.ActionDate.Date, DateTime.UtcNow.ToLocalTime().Date) == 0)).ToList();
-			foreach (var item in customers)
+			foreach (var customer in customers)
 			{
-                customerDebts.Add(new Tuple<Customer, CustomerDebts>(item, item.CustomerDebts.Last()));
+                foreach (var debt in customer.CustomerDebts)
+                {
+                    customerDebts.Add(new Tuple<Customer, CustomerDebts>(customer, debt));
+                }
             }
         }
 
@@ -67,7 +70,7 @@ namespace CafeErez.Client.Pages.CustomerScreen
             var customerUpdated = await _customerHandler.UpdateCustomer(customer);
             if (!CustomerAlreadyExistInList(customerUpdated.Data as Customer))
                 customerDebts.Add(new Tuple<Customer, CustomerDebts>(customer, customer.CustomerDebts.Last()));
-            //customers.Add(customer);
+
             _snackBar.Add(_localizer["Customer Updated."], Severity.Success);
             StateHasChanged();
         }
