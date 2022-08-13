@@ -64,8 +64,8 @@ namespace CafeErez.Client.Pages.CustomerScreen
             if (customer == null)
                 return;
 
-            await _customerHandler.UpdateCustomer(customer);
-            if (!CustomerAlreadyExistInList(customer))
+            var customerUpdated = await _customerHandler.UpdateCustomer(customer);
+            if (!CustomerAlreadyExistInList(customerUpdated.Data as Customer))
                 customerDebts.Add(new Tuple<Customer, CustomerDebts>(customer, customer.CustomerDebts.Last()));
             //customers.Add(customer);
             _snackBar.Add(_localizer["Customer Updated."], Severity.Success);

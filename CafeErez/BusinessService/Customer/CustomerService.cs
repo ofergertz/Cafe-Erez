@@ -41,11 +41,11 @@ namespace BusinessService.Customer
             return await ServiceWrapper<CafeErez.Shared.Model.Customer.Customer>.SuccessAsync(customerSaved.Entity);
         }
 
-        public async Task<CafeErez.Shared.Model.Customer.Customer> UpdateCustomer(CafeErez.Shared.Model.Customer.Customer customer)
+        public async Task<IServiceWrapper<CafeErez.Shared.Model.Customer.Customer>> UpdateCustomer(CafeErez.Shared.Model.Customer.Customer customer)
         {
             var customerSaved = _db.Customer.Update(customer);
             await _db.SaveChangesAsync();
-            return customerSaved.Entity;
+            return await ServiceWrapper<CafeErez.Shared.Model.Customer.Customer>.SuccessAsync(customerSaved.Entity);
         }
     }
 }

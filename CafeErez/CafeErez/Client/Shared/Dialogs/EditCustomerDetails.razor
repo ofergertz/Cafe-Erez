@@ -40,7 +40,7 @@
         {
             NewCustomerDebts.Item2.ActionDate = DateTime.UtcNow.ToLocalTime();
             var existingDebt = NewCustomerDebts.Item1.CustomerDebts.FindLast(x => x.CustomerDebtsId == NewCustomerDebts.Item2.CustomerDebtsId);
-            NewCustomerDebts.Item1.CustomerDebts.Remove(existingDebt);
+            NewCustomerDebts.Item1.CustomerDebts.Clear();
             NewCustomerDebts.Item1.CustomerDebts.Add(NewCustomerDebts.Item2);
             MudDialog.Close(DialogResult.Ok(NewCustomerDebts.Item1));
         }
