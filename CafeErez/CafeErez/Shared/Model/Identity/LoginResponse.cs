@@ -12,6 +12,7 @@ namespace CafeErez.Shared.Model.Identity
         public string LastName {get; set;}
         public string FirstName {get; set;}
         public string UserImageURL { get; set; }
+        public string Token { get; set; }
 
     }
 }

@@ -9,7 +9,7 @@ namespace CafeErez.Shared.BusinessService.Authentication
 {
     public interface IAuthenticationManager
     {
-        Task<IServiceWrapper> Login(LoginRequest loginRequest);
+        Task<IServiceWrapper<LoginResponse>> Login(LoginRequest loginRequest);
         Task<IServiceWrapper> Register(RegisterRequest registerRequest);
         Task<IServiceWrapper> Logout();
 

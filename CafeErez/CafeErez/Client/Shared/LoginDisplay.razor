@@ -1,0 +1,15 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<LoginDisplay> _localizer
+
+<AuthorizeView>
+    <Authorized>
+        <MudText style="font-size:larger; color:antiquewhite"  Href="authentication/profile">Hello @context.User.Identity?.Name,</MudText>
+        <MudButton style="color:antiquewhite" Text="@_localizer["Logout"]" Icon="@Icons.Material.Filled.Logout" OnClick="Logout">Logout</MudButton>
+@*        <a href="Logout" style="font-size:larger; color:whitesmoke">Log out</a>
+*@        
+    </Authorized>
+    <NotAuthorized>
+        <a href="/register" style="font-size:larger; color:whitesmoke" >Register</a>
+        <MudText> &nbsp;&nbsp;&nbsp</MudText>
+    </NotAuthorized>
+</AuthorizeView>
+

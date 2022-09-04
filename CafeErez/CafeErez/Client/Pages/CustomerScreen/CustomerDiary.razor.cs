@@ -69,7 +69,7 @@ namespace CafeErez.Client.Pages.CustomerScreen
 
             var customerUpdated = await _customerHandler.UpdateCustomer(customer);
             if (!CustomerAlreadyExistInList(customerUpdated.Data as Customer))
-                customerDebts.Add(new Tuple<Customer, CustomerDebts>(customer, customer.CustomerDebts.Last()));
+                customerDebts.Add(new Tuple<Customer, CustomerDebts>(customer, (customerUpdated.Data as Customer).CustomerDebts.Last()));
 
             _snackBar.Add(_localizer["Customer Updated."], Severity.Success);
             StateHasChanged();
@@ -93,11 +93,16 @@ namespace CafeErez.Client.Pages.CustomerScreen
         }
 
         private async Task GetDebts(Tuple<Customer,CustomerDebts> tuple)
-		{
+        {
             var customer = await GetCustomerById(tuple.Item1.CustomerId);
-            var sum = customer.CustomerDebts.Sum(x => int.Parse(x.ActionAmount)).ToString();
+            var sum = CalculateTotalDebts(customer).ToString();
             bool? result = await _dialogService.ShowMessageBox(
          "Total Debts", $"Total debts for {customer.FirstName} {customer.LastName} is: {sum}");
+        }
+
+        private static int CalculateTotalDebts(Customer customer)
+        {
+            return customer.CustomerDebts.Sum(x => int.Parse(x.ActionAmount));
         }
 
         private async Task AddCustomer(Customer customer)

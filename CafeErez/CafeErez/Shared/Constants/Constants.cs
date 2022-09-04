@@ -14,6 +14,15 @@ namespace CafeErez.Shared.Constants
             public const string Register = "api/identity/Register";
         }
 
+        public static class Local
+        {
+            public static string Preference = "clientPreference";
+
+            public static string AuthToken = "authToken";
+            public static string RefreshToken = "refreshToken";
+            public static string UserImageURL = "userImageURL";
+        }
+
         public static class Customers
         {
             public const string GetCustomers = "api/customer/GetCustomers";

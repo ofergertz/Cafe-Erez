@@ -16,8 +16,12 @@
         <MudTextField Label=@_localizer["PhoneNumber"] HelperText=@_localizer["Exactly 10 characters"]
                               @bind-Value="NewCustomerDebts.Item1.PhoneNumber" For="@(() => 
                                            NewCustomerDebts.Item1.PhoneNumber)"/>
-        <MudTextField Label=@_localizer["Action"] HelperText=@_localizer["Pais/Store/Winner"]
-                              @bind-Value="NewCustomerDebts.Item2.Action" For="@(() => NewCustomerDebts.Item2.Action)"/>
+        <MudSelect T="string" ValueChanged="OnActionSelected" Label="Action" AnchorOrigin="Origin.BottomCenter">
+            <MudSelectItem Value="@("Winner")" />
+            <MudSelectItem Value="@("Pais")" />
+            <MudSelectItem Value="@("Store")" />
+            <MudSelectItem Value="@("Refund")" />
+        </MudSelect>
         <MudTextField Label=@_localizer["Action Amount"] 
                               @bind-Value="NewCustomerDebts.Item2.ActionAmount" For="@(() => NewCustomerDebts.Item2.ActionAmount)"/>
         <MudTextField Label=@_localizer["Comments"]
@@ -34,6 +38,8 @@
 
     [Parameter] public Tuple<Customer, CustomerDebts> NewCustomerDebts { get; set; }
 
+    private string Action = string.Empty;
+
     void Submit()
     {
         if (InputOfEditCustomerFormIsValidated())
@@ -41,11 +47,18 @@
             NewCustomerDebts.Item2.ActionDate = DateTime.UtcNow.ToLocalTime();
             var existingDebt = NewCustomerDebts.Item1.CustomerDebts.FindLast(x => x.CustomerDebtsId == NewCustomerDebts.Item2.CustomerDebtsId);
             NewCustomerDebts.Item1.CustomerDebts.Clear();
+            NewCustomerDebts.Item2.Action = Action;
+            NewCustomerDebts.Item2.CustomerDebtsId = NewCustomerDebts.Item2.CustomerDebtsId;
             NewCustomerDebts.Item1.CustomerDebts.Add(NewCustomerDebts.Item2);
             MudDialog.Close(DialogResult.Ok(NewCustomerDebts.Item1));
         }
     }
     void Cancel() => MudDialog.Cancel();
+
+    void OnActionSelected(string action)
+    {
+        Action = action;
+    }
 
     private bool InputOfEditCustomerFormIsValidated()
     {

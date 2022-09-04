@@ -14,6 +14,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddBlazoredModal();
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddAuthorizationCore();
 builder.Services.AddLocalization(options =>
 {
     options.ResourcesPath = "Resources";

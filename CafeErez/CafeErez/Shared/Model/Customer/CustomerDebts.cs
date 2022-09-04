@@ -9,6 +9,19 @@ namespace CafeErez.Shared.Model.Customer
 {
     public class CustomerDebts
     {
+        public CustomerDebts()
+        {
+        }
+
+        public CustomerDebts(CustomerDebts customerDebts)
+        {
+            CustomerDebtsId = customerDebts.CustomerDebtsId;
+            Action = customerDebts.Action;
+            ActionAmount = customerDebts.ActionAmount;
+            Comments = customerDebts.Comments;
+            ActionDate = customerDebts.ActionDate;
+        }
+
         public int CustomerDebtsId { get; set; }
         public string Action { get; set; } = "";
         public string ActionAmount { get; set; } = "";

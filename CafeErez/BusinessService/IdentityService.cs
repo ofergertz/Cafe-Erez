@@ -4,7 +4,14 @@ using CafeErez.Shared.Constants;
 using CafeErez.Shared.Model.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using System.Security.Claims;
+using System.Text;
 
 namespace BusinessService
 {
@@ -16,17 +23,19 @@ namespace BusinessService
         private readonly IUsersHandler _userHandler;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<AppRole> _roleManagers;
+        private readonly IConfiguration _configuration;
 
         public IdentityService(IStringLocalizer<IdentityService> localizer,
             IServiceProvider serviceProvider,
-            UserManager<User> userManagers, RoleManager<AppRole> roleManagers, 
-            IUsersHandler userHandler)
+            UserManager<User> userManagers, RoleManager<AppRole> roleManagers,
+            IUsersHandler userHandler, IConfiguration configuration)
         {
             _localizer = localizer;
             _serviceProvider = serviceProvider;
             _userManager = userManagers;
             _roleManagers = roleManagers;
             _userHandler = userHandler;
+            _configuration = configuration;
         }
 
         public async Task<IServiceWrapper<LoginResponse>> LoginAsync(LoginRequest loginRequest)
@@ -43,7 +52,7 @@ namespace BusinessService
                 return await ServiceWrapper<LoginResponse>.FailAsync(_localizer["Invalid Credentials."]);
             }
 
-            var response = CreateLoginResponse(user);
+            var response = CreateLoginResponse(user, loginRequest);
             return await ServiceWrapper<LoginResponse>.SuccessAsync(response);
         }
 
@@ -75,16 +84,46 @@ namespace BusinessService
             await _userManager.AddToRoleAsync(user, Constants.Roles.BasicRole);
             return await ServiceWrapper<RegisterResponse>.SuccessAsync(CreateRegisterResponse(user));
         }
-        private LoginResponse CreateLoginResponse(User user)
+        private LoginResponse CreateLoginResponse(User user, LoginRequest loginRequest)
         {
             var response = new LoginResponse();
             response.UserImageURL = user.ProfilePictureDataUrl;
             response.UserName = user.UserName;
             response.FirstName = user.FirstName;
             response.LastName = user.LastName;
+            response.Token = GenerateToken(user);
 
             return response;
         }
+
+        public string GenerateToken(User user)
+        {
+            var mySecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
+            /// A <see cref="SecurityTokenHandler"/> designed for creating and validating Json Web Tokens.
+            var tokenHandler = new JwtSecurityTokenHandler();
+            /// Contains some information which used to create a security token.
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                /// Gets or sets the <see cref="ClaimsIdentity"/>.
+                /// If both <cref see="Claims"/> and <see cref="Subject"/> are set, the claim values in Subject will be combined with the values
+                /// in Claims. The values found in Claims take precedence over those found in Subject, so any duplicate
+                /// values will be overridden.
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                     new Claim(ClaimTypes.Name, user.UserName),
+                     new Claim(ClaimTypes.Email, user.Email),
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                Issuer = _configuration["JwtIssuer"],
+                Audience = _configuration["JwtAudience"],
+                SigningCredentials = new SigningCredentials(mySecurityKey, SecurityAlgorithms.HmacSha256Signature)
+            };
+            /// Creates a Json Web Token (JWT).
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            /// Serializes a <see cref="JwtSecurityToken"/> into a JWT in Compact Serialization Format.
+            return tokenHandler.WriteToken(token);
+        }
+
         private RegisterResponse CreateRegisterResponse(User user)
         {
             var serviceResponse = new RegisterResponse();
