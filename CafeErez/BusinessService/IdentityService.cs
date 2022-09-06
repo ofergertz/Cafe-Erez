@@ -113,7 +113,7 @@ namespace BusinessService
                      new Claim(ClaimTypes.Name, user.UserName),
                      new Claim(ClaimTypes.Email, user.Email),
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddHours(1),
                 Issuer = _configuration["JwtIssuer"],
                 Audience = _configuration["JwtAudience"],
                 SigningCredentials = new SigningCredentials(mySecurityKey, SecurityAlgorithms.HmacSha256Signature)
