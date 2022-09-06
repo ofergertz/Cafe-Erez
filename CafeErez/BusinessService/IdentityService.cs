@@ -111,8 +111,12 @@ namespace BusinessService
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                      new Claim(ClaimTypes.Name, user.UserName),
+                     new Claim(ClaimTypes.NameIdentifier, user.Id),
+                     new Claim(ClaimTypes.Email, user.Email),
+                     new Claim(ClaimTypes.GivenName, user.FirstName),
+                     new Claim(ClaimTypes.Surname, user.LastName)
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(1),
                 Issuer = _configuration["JwtIssuer"],
                 Audience = _configuration["JwtAudience"],
                 SigningCredentials = new SigningCredentials(mySecurityKey, SecurityAlgorithms.HmacSha256Signature)

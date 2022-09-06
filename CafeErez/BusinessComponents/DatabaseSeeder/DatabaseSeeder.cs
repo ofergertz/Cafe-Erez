@@ -15,17 +15,20 @@ namespace BusinessComponents.DatabaseSeeder
         private readonly ApplicationDbContext _db;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly ILookupNormalizer normalizer;
 
         public DatabaseSeeder(
             UserManager<User> userManager,
             RoleManager<AppRole> roleManager,
             ApplicationDbContext db,
-            ILogger<DatabaseSeeder> logger)
+            ILogger<DatabaseSeeder> logger,
+            ILookupNormalizer normalizer)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _db = db;
             _logger = logger;
+            this.normalizer = normalizer;
         }
 
         public void Initialize()
@@ -88,10 +91,10 @@ namespace BusinessComponents.DatabaseSeeder
                     LastName = "Admin",
                     Email = "ofer1g38@gmail.com",
                     UserName = "oferg88",
-                    NormalizedUserName = ("oferg88").ToUpper(),
+                    NormalizedUserName = normalizer.NormalizeEmail("oferg88"),
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true,
-                    NormalizedEmail = ("ofer1g38@gmail.com").ToUpper(),
+                    NormalizedEmail = normalizer.NormalizeEmail("ofer1g38@gmail.com"),
                     PhoneNumber = "0508948070",
                 };
                 var superUserInDb = await _userManager.FindByEmailAsync(superUser.Email);
