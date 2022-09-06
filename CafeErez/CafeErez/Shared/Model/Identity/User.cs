@@ -8,6 +8,6 @@ namespace CafeErez.Shared.Model.Identity
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string? ProfilePictureDataUrl { get; set; }
-
+        public string Email { get; set; }
     }
 }

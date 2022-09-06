@@ -38,7 +38,7 @@ namespace BusinessService.Validators
                 .Matches(@"[A-Z]").WithMessage(_localizer["Password must contain at least one capital letter"])
                 .Matches(@"[a-z]").WithMessage(_localizer["Password must contain at least one lowercase letter"])
                 .Matches(@"[0-9]").WithMessage(_localizer["Password must contain at least one digit"]);
-            RuleFor(request => request.Password2)
+            RuleFor(request => request.ConfirmPassword)
                 .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => _localizer["Password Confirmation is required!"])
                 .Equal(request => request.Password).WithMessage(x => _localizer["Passwords don't match"]);
             RuleFor(request => request.PhoneNumber)

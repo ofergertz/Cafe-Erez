@@ -15,15 +15,19 @@ namespace CafeErez.Shared.Model.Identity
 
         [Required]
         [Compare(nameof(Password))]
-        public string Password2 { get; set; }
+        public string ConfirmPassword { get; set; }
 
         [Required]
         [StringLength(8, ErrorMessage = "Name length can't be more than 8.")]
         public string UserName { get; set; }
+        [Required(ErrorMessage = "First Name must be filled")]
         public string FirstName { get; set; }
+        [Required(ErrorMessage = "Last Name must be filled")]
         public string LastName { get; set; }
+        [Required(ErrorMessage = "Email Name must be filled ")]
         public string Email { get; set; }
-        public string ProfilePicture { get; set; }
+        public string? ProfilePicture { get; set; }
+        [Required(ErrorMessage = "Phone Number must be filled")]
         public string PhoneNumber { get; set; }
     }
 }

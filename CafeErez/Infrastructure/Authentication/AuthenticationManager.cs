@@ -45,9 +45,11 @@ namespace Infrastructure.Authentication
             return await ServiceWrapper.SuccessAsync();
         }
 
-        public Task<IServiceWrapper> Register(RegisterRequest registerRequest)
+        public async Task<IServiceWrapper<RegisterResponse>> Register(RegisterRequest registerRequest)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PostAsJsonAsync(Constants.IdentityAuthenticationApi.Register, registerRequest);
+            var result = await response.ToResult<RegisterResponse>();
+            return result;
         }
     }
 }

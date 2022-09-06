@@ -50,7 +50,7 @@ namespace BusinessComponents.DatabaseSeeder
                 }
 
                 var basicRole = new AppRole();
-                adminRole.Name = Constants.Roles.BasicRole;
+                basicRole.Name = Constants.Roles.BasicRole;
 
                 var basicRoleInDb = await _roleManager.FindByNameAsync(Constants.Roles.BasicRole);
                 if (basicRoleInDb == null)

@@ -111,7 +111,6 @@ namespace BusinessService
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                      new Claim(ClaimTypes.Name, user.UserName),
-                     new Claim(ClaimTypes.Email, user.Email),
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 Issuer = _configuration["JwtIssuer"],

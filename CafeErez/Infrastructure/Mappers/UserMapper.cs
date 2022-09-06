@@ -13,12 +13,18 @@ namespace Infrastructure.Mappers
         public User Map(RegisterRequest registerRequest)
         {
             var user = new User();
+            user.Id = Guid.NewGuid().ToString();
             user.FirstName = registerRequest.FirstName;
             user.LastName = registerRequest.LastName;
             user.PhoneNumber = registerRequest.PhoneNumber;
             user.ProfilePictureDataUrl = registerRequest.ProfilePicture;
             user.UserName = registerRequest.UserName;
-            return user;
+            user.Email = registerRequest.Email;
+            user.NormalizedEmail = registerRequest.Email.ToUpper();
+            user.NormalizedUserName = registerRequest.UserName.ToUpper();
+            user.EmailConfirmed = true;
+            user.PhoneNumberConfirmed = true;
+            return user;                 
         }
     }
 }

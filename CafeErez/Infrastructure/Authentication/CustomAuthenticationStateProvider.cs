@@ -74,7 +74,7 @@ namespace Infrastructure.Authentication
                 {
                     claims.Add(new Claim(ClaimTypes.Name, UserName4.ToString()));
                 }
-                keyValuePairs.Remove(ClaimTypes.Role);
+                keyValuePairs.Remove(ClaimTypes.Name);
             }
             claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
             return claims;

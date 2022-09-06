@@ -2,7 +2,7 @@
 @layout MainLayout
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Login> _localizer
 
-    <MudButton OnClick=Fill>Fill details</MudButton>
+<MudButton OnClick=Fill>Fill details</MudButton>
 <EditForm Model="@_loginRequest" OnValidSubmit="SubmitAsync">
     <MudGrid>
         <DataAnnotationsValidator />
