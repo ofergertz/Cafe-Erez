@@ -17,9 +17,12 @@ namespace CafeErez.Client.Shared.Dialogs
         {
             var result = await _authenticationManager.Logout();
             if (result.Succeeded)
-                _navigationManager.NavigateTo("/");
+                _navigationManager.NavigateTo("/Login");
             else
                 _snackBar.Add(_localizer["Customer already logged out."], Severity.Info);
+
+            MudDialog.Close(DialogResult.Ok(true));
+
         }
         void Cancel() => MudDialog.Cancel();
     }

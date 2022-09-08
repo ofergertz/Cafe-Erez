@@ -1,0 +1,12 @@
+﻿@page "/"
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Home> _localizer
+
+<MudContainer>
+    <MudStack Row="false" Justify="Justify.Center" Spacing="5" >
+        <MudText  Typo="Typo.h2" Align="Align.Center"><b> Welcome To Cafe Erez</b></MudText>
+        <MudStack  Justify="Justify.Center" Row="true" Align="Align.Center">
+            <MudImage  Src="images/WinnerHome.jpg" Alt="Mony the dog"  Class="rounded-lg"/>
+            <MudImage  Src="images/PaisHome.jpg" Alt="Mony the dog"  Class="rounded-lg"/>
+        </MudStack>
+    </MudStack>
+</MudContainer>

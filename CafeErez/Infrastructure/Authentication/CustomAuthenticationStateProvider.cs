@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components.Authorization;
 using Blazored.LocalStorage;
+using System.Linq;
 
 namespace Infrastructure.Authentication
 {
@@ -57,27 +58,54 @@ namespace Infrastructure.Authentication
             var payload = jwt.Split('.')[1];
             var jsonBytes = ParseBase64WithoutPadding(payload);
             var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
-            keyValuePairs.TryGetValue(ClaimTypes.Name, out object UserName);
-            keyValuePairs.TryGetValue(ClaimTypes.NameIdentifier, out object UserName1);
-            keyValuePairs.TryGetValue(ClaimTypes.Email, out object UserName2);
-            keyValuePairs.TryGetValue(ClaimTypes.Surname, out object UserName3);
-            keyValuePairs.TryGetValue("unique_name", out object UserName4);
-            if (UserName4 != null)
-            {
-                if (UserName4.ToString().Trim().StartsWith("["))
-                {
-                    var parsedRoles = JsonSerializer.Deserialize<string[]>(UserName4.ToString());
-                    claims.AddRange(parsedRoles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-                }
-                else
+            if (keyValuePairs != null)
+            {
+                keyValuePairs.TryGetValue(ClaimTypes.Role, out var roles);
+
+                if (roles != null)
                 {
-                    claims.Add(new Claim(ClaimTypes.Name, UserName4.ToString()));
+                    if (roles.ToString().Trim().StartsWith("["))
+                    {
+                        var parsedRoles = JsonSerializer.Deserialize<string[]>(roles.ToString());
+
+                        claims.AddRange(parsedRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+                    }
+                    else
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, roles.ToString()));
+                    }
+
+                    keyValuePairs.Remove(ClaimTypes.Role);
                 }
-                keyValuePairs.Remove(ClaimTypes.Name);
+
+                claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
             }
-            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
             return claims;
+            //var claims = new List<Claim>();
+            //var payload = jwt.Split('.')[1];
+            //var jsonBytes = ParseBase64WithoutPadding(payload);
+            //var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+            //keyValuePairs.TryGetValue(ClaimTypes.Name, out object UserName);
+            //keyValuePairs.TryGetValue(ClaimTypes.NameIdentifier, out object UserName1);
+            //keyValuePairs.TryGetValue(ClaimTypes.Email, out object UserName2);
+            //keyValuePairs.TryGetValue(ClaimTypes.Surname, out object UserName3);
+            //if (UserName != null)
+            //{
+            //    if (UserName.ToString().Trim().StartsWith("["))
+            //    {
+            //        var parsedRoles = JsonSerializer.Deserialize<string[]>(UserName.ToString());
+            //        claims.AddRange(parsedRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            //    }
+            //    else
+            //    {
+            //        claims.Add(new Claim(ClaimTypes.Name, UserName.ToString()));
+            //    }
+            //    keyValuePairs.Remove(ClaimTypes.Name);
+            //}
+            //claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
+            //return claims;
         }
         private byte[] ParseBase64WithoutPadding(string base64)
         {

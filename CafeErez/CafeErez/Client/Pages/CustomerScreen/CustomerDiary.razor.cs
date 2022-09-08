@@ -1,4 +1,5 @@
-﻿using CafeErez.Shared.Model.Customer;
+﻿using CafeErez.Client.Shared.Extensions;
+using CafeErez.Shared.Model.Customer;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -23,6 +24,12 @@ namespace CafeErez.Client.Pages.CustomerScreen
                     customerDebts.Add(new Tuple<Customer, CustomerDebts>(customer, debt));
                 }
             }
+        }
+
+        protected void FilterChanged(ChangeEventArgs args)
+        {
+            searchString = args.Value.ToString();
+            //table.ReloadServerData();
         }
 
         private async Task OnCustomerSelected(Customer customer)
@@ -67,9 +74,13 @@ namespace CafeErez.Client.Pages.CustomerScreen
             if (customer == null)
                 return;
 
+            var customerDebt = customer.CustomerDebts.Last();
+            customerDebt.UserId = await GetUserId();
             var customerUpdated = await _customerHandler.UpdateCustomer(customer);
             if (!CustomerAlreadyExistInList(customerUpdated.Data as Customer))
-                customerDebts.Add(new Tuple<Customer, CustomerDebts>(customer, (customerUpdated.Data as Customer).CustomerDebts.Last()));
+            {
+                customerDebts.Add(new Tuple<Customer, CustomerDebts>(customer, customerDebt));
+            }
 
             _snackBar.Add(_localizer["Customer Updated."], Severity.Success);
             StateHasChanged();
@@ -100,6 +111,13 @@ namespace CafeErez.Client.Pages.CustomerScreen
          "Total Debts", $"Total debts for {customer.FirstName} {customer.LastName} is: {sum}");
         }
 
+        private async Task<string> GetUserId()
+        {
+            var state = await _stateProvider.GetAuthenticationStateAsync();
+            var user = state.User;
+            return user.GetUserId();
+        }
+
         private static int CalculateTotalDebts(Customer customer)
         {
             return customer.CustomerDebts.Sum(x => int.Parse(x.ActionAmount));
@@ -107,6 +125,8 @@ namespace CafeErez.Client.Pages.CustomerScreen
 
         private async Task AddCustomer(Customer customer)
         {
+            var customerDebt = customer.CustomerDebts.Last();
+            customerDebt.UserId = await GetUserId();
             var response = await _customerHandler.SaveCustomer(customer);
             if (response.Data == null)
             {
@@ -117,11 +137,11 @@ namespace CafeErez.Client.Pages.CustomerScreen
             _snackBar.Add(_localizer["Customer Saved."], Severity.Success);
             var newCustomer = response.Data as Customer;
             existingCustomers.Add(newCustomer);
-            customerDebts.Add(new Tuple<Customer, CustomerDebts>(newCustomer,
-                newCustomer.CustomerDebts.Last()));
+            customerDebts.Add(new Tuple<Customer, CustomerDebts>(newCustomer, customerDebt));
             //customers.Add(response.Data as Customer);
             StateHasChanged();
         }
+
         private async Task<List<Customer>> GetCustomers()
         {
             var customersResult = await _customerHandler.GetCustomers();
@@ -146,27 +166,9 @@ namespace CafeErez.Client.Pages.CustomerScreen
             _snackBar.Add(_localizer["Customer not found."], Severity.Error);
             return false;
         }
-        protected void FilterChanged(ChangeEventArgs args)
-        {
-            searchString = args.Value.ToString();
-            //table.ReloadServerData();
-        }
-
-        //private string GetTotals(Customer customer)
-        //{
-        //    var paisDebts = int.Parse(customer.CustomerDebts.PaisDebts);
-        //    var winnerDebts = int.Parse(customer.CustomerDebts.WinnerDebts);
-        //    var storeDebts = int.Parse(customer.CustomerDebts.StoreDebts);
-
-        //    var totals = paisDebts + winnerDebts + storeDebts;
-        //    return totals.ToString();
-        //}
 
         private string GetActionDate(CustomerDebts customer)
         {
-            //customer.CustomerDebts.Last().ActionDate = customer.CustomerDebts?.Last()?.ActionDate ?? DateTime.UtcNow.ToLocalTime().Date;
-
-            //return customer.CustomerDebts.Last().ActionDate.ToString("dd/MM/yyyy  HH:mm:ss");
             return customer.ActionDate.ToString("dd/MM/yyyy  HH:mm:ss");
         }
     }

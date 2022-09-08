@@ -1,6 +1,8 @@
 ﻿using CafeErez.Shared.BusinessService;
 using CafeErez.Shared.Model.Identity;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using System.Security.Claims;
 
 namespace CafeErez.Client.Pages.Authentication
 {

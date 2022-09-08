@@ -27,5 +27,7 @@ namespace CafeErez.Shared.Model.Customer
         public string ActionAmount { get; set; } = "";
         public string Comments { get; set; } = "";
         public DateTime ActionDate { get; set; } = default(DateTime);
+        public string UserId { get; set; } = "";
+
     }
 }

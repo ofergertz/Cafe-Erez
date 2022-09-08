@@ -8,27 +8,51 @@
 <MudSnackbarProvider />
 
 <MudRTLProvider RightToLeft="@_rightToLeft">
-<MudLayout>
-    <MudAppBar>
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        @_localizer["Welcome to Cafe Erez"]
-        <MudSpacer />
-        <LoginDisplay />
-        <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
-            @foreach (var language in LocalizationConstants.SupportedLanguages)
-            {
-                <MudMenuItem OnClick="(()=> ChangeLanguageAsync(language))">@_localizer[language.DisplayName]</MudMenuItem>
-            }
-        </MudMenu>
-    </MudAppBar>
-        
-    <MudDrawer @bind-Open="@_drawerOpen">
-        <NavMenu/>
-    </MudDrawer>
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Medium">
-            @Body
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
+    <AuthorizeView>
+        <NotAuthorized>
+            <MudAppBar>
+                @_localizer["Welcome to Cafe Erez"]
+                <MudSpacer />
+               <a href="/register" style="font-size:larger; color:whitesmoke" >Register</a>
+                <MudText> &nbsp;&nbsp;&nbsp</MudText>
+                <a href="/Login" style="font-size:larger; color:whitesmoke" >Login</a>
+                <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
+                    @foreach (var language in LocalizationConstants.SupportedLanguages)
+                    {
+                        <MudMenuItem OnClick="(()=> ChangeLanguageAsync(language))">@_localizer[language.DisplayName]</MudMenuItem>
+                    }
+                </MudMenu>
+            </MudAppBar>
+            <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height: 100vh;">
+                    @Body
+            </MudContainer>
+       </NotAuthorized>
+
+      <Authorized>
+        <MudLayout>
+            <MudAppBar>
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                @_localizer["Welcome to Cafe Erez"]
+                <MudSpacer />
+
+                <MudText style="font-size:larger; color:antiquewhite"  Href="authentication/profile">Hello @context.User.Identity?.Name,</MudText>
+                <MudButton style="color:antiquewhite" Text="@_localizer["Logout"]" Icon="@Icons.Material.Filled.Logout" OnClick="Logout">Logout</MudButton>
+                <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
+                    @foreach (var language in LocalizationConstants.SupportedLanguages)
+                    {
+                        <MudMenuItem OnClick="(()=> ChangeLanguageAsync(language))">@_localizer[language.DisplayName]</MudMenuItem>
+                    }
+                </MudMenu>
+            </MudAppBar>
+            <MudDrawer @bind-Open="@_drawerOpen"  ClipMode="DrawerClipMode.Always">
+                <NavMenu/>
+            </MudDrawer>
+            <MudMainContent>
+                <MudContainer >
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </MudLayout>
+      </Authorized>
+    </AuthorizeView>
 </MudRTLProvider>

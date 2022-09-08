@@ -1,4 +1,5 @@
 ﻿using CafeErez.Shared.Infrastructure.Localization;
+using MudBlazor;
 using static CafeErez.Shared.Constants.Constants;
 
 namespace CafeErez.Client.Shared
@@ -17,6 +18,17 @@ namespace CafeErez.Client.Shared
                 return;
 			}
             _rightToLeft = culturePreference.isRtl;
+
+           if(await UserIsAuthenticated())
+                _navigationManager.NavigateTo("/CustomerDiary");
+        }
+
+        private async Task<bool> UserIsAuthenticated()
+        {
+            var state = await _stateProvider.GetAuthenticationStateAsync();
+            var user = state.User;
+            if (user == null) return false;
+            return (user.Identity?.IsAuthenticated == true);
         }
 
         void DrawerToggle()
@@ -24,6 +36,19 @@ namespace CafeErez.Client.Shared
             _drawerOpen = !_drawerOpen;
         }
 
+        private void Logout()
+        {
+            var parameters = new DialogParameters
+            {
+                {nameof(Dialogs.Logout.ContentText), $"{_localizer["Logout Confirmation"]}"},
+                {nameof(Dialogs.Logout.ButtonText), $"{_localizer["Confirm"]}"},
+                {nameof(Dialogs.Logout.Color), Color.Error},
+            };
+
+            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+
+            _dialogService.Show<Dialogs.Logout>(_localizer["Logout"], parameters, options);
+        }
 
         private async Task ChangeLanguageAsync(LanguageCode languageCode)
         {
