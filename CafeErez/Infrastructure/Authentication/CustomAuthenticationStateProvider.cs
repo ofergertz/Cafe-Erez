@@ -21,7 +21,8 @@ namespace Infrastructure.Authentication
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var savedToken = await _localStorage.GetItemAsync<string>("authToken");
-            if (string.IsNullOrWhiteSpace(savedToken))
+            var claims = ParseClaimsFromJwt(savedToken);
+            if (string.IsNullOrWhiteSpace(savedToken) || !IsValidToken(claims))
             {
                 return new AuthenticationState(new ClaimsPrincipal(
                     new ClaimsIdentity()));
@@ -31,7 +32,7 @@ namespace Infrastructure.Authentication
             /// A Claim is a statement about an entity by an Issuer.
             /// A Claim consists of a Type, Value, a Subject and an Issuer.
             /// An Identity that is represented by a set of claims.
-            var identity = new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt");
+            var identity = new ClaimsIdentity(claims, "jwt");
             //supporting multiple claims-based identities
             var user = new ClaimsPrincipal(identity);
             /// Provides information about the currently authenticated user, if any.
@@ -40,6 +41,20 @@ namespace Infrastructure.Authentication
             NotifyAuthenticationStateChanged(authState);
             return state;
         }
+
+        private bool IsValidToken(IEnumerable<Claim> claims)
+        {
+            var expDateFromClaim = claims.Where(claim => claim.Type.Equals("exp")).FirstOrDefault();
+            if(expDateFromClaim != null)
+            {
+                var datetime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expDateFromClaim.Value));
+                if (datetime.UtcDateTime > DateTime.UtcNow)
+                    return true;
+            }
+
+            return false;
+        }
+
         public void MarkUserAsAuthenticated(string UserName)
         {
             var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, UserName) }, "apiauth"));
