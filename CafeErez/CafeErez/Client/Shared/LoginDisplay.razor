@@ -1,16 +1,16 @@
-﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<LoginDisplay> _localizer
+﻿@using CafeErez.Shared.Infrastructure.Localization
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LoginDisplay> _localizer
 
-<AuthorizeView>
-    <Authorized>
-        <MudText style="font-size:larger; color:antiquewhite"  Href="authentication/profile">Hello @context.User.Identity?.Name,</MudText>
-        <MudButton style="color:antiquewhite" Text="@_localizer["Logout"]" Icon="@Icons.Material.Filled.Logout" OnClick="Logout">Logout</MudButton>
-@*        <a href="Logout" style="font-size:larger; color:whitesmoke">Log out</a>
-*@        
-    </Authorized>
-    <NotAuthorized>
-        <a href="/register" style="font-size:larger; color:whitesmoke" >Register</a>
-        <MudText> &nbsp;&nbsp;&nbsp</MudText>
-        <a href="/Login" style="font-size:larger; color:whitesmoke" >Login</a>
-    </NotAuthorized>
-</AuthorizeView>
-
+<MudAppBar>
+    @_localizer["Welcome to Cafe Erez"]
+    <MudSpacer />
+    <a href="/register" style="font-size:larger; color:whitesmoke" >Register</a>
+    <MudText> &nbsp;&nbsp;&nbsp</MudText>
+    <a href="/Login" style="font-size:larger; color:whitesmoke" >Login</a>
+    <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
+        @foreach (var language in LocalizationConstants.SupportedLanguages)
+        {
+            <MudMenuItem OnClick="(()=> ChangeLanguageAsync(language))">@_localizer[language.DisplayName]</MudMenuItem>
+        }
+    </MudMenu>
+</MudAppBar>

@@ -2,6 +2,8 @@
 @using System.Net.Http.Json
 @using Blazored.LocalStorage
 @using CafeErez.Shared.BusinessService
+@using CafeErez.Shared.BusinessService.Products
+@using CafeErez.Shared.Model.Identity
 @using Infrastructure.Authentication
 @using Microsoft.AspNetCore.Components.Authorization
 @using CafeErez.Shared.BusinessService.Authentication
@@ -27,5 +29,8 @@
 @inject IDialogService _dialogService
 @inject ILocalStorageService _localStorageService;
 @inject CustomAuthenticationStateProvider _stateProvider;
+@inject IJSRuntime JSRuntime;
+@inject IApplicationUserManager _userManager;
+@inject IProductHandler _productHandler;
 
 

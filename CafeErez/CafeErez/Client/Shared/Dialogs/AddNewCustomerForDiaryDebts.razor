@@ -54,8 +54,7 @@
     {
         NewCustomerDebts.ActionDate = DateTime.UtcNow.ToLocalTime();
         NewCustomer.CustomerDebts.Clear();
-        if (NewCustomerDebts.Action == "Refund")
-            NewCustomerDebts.ActionAmount = "-" + NewCustomerDebts.ActionAmount;
+        NewCustomerDebts.ActionAmount = NewCustomerDebts.ActionAmount;
         NewCustomer.CustomerDebts.Add(NewCustomerDebts);
         MudDialog.Close(DialogResult.Ok(NewCustomer));
     }

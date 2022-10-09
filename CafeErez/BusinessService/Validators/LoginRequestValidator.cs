@@ -2,11 +2,6 @@
 using CafeErez.Shared.Model.Identity;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessService.Validators
 {
@@ -17,10 +12,10 @@ namespace BusinessService.Validators
         public LoginRequestValidator(IStringLocalizer<RegisterRequestValidator> localizer)
         {
             _localizer = localizer;
-            DefineValidatorsForRegisterRequest();
+            DefineValidatorsForLoginRequest();
         }
 
-        private void DefineValidatorsForRegisterRequest()
+        private void DefineValidatorsForLoginRequest()
         {
             RuleFor(request => request.Email)
                  .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(x => _localizer["Email is required"])

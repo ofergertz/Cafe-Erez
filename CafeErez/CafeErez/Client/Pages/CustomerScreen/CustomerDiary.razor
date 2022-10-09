@@ -3,7 +3,13 @@
 
 <MudStack Class="pa-3 ma-3" AlignItems="AlignItems.Start"  Row="true">
     <MudFab Class="pr-5 mr-15" @onclick="AddAction" Label="@_localizer["Add Action"]" Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" />
-    <MudSelect  Class="pl-15 ml-5" ValueChanged="OnCustomerSelected" T="Customer" Label=@_localizer["Select Existing Customer"] AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" Clearable>
+    <MudFab Class="pr-5 mr-15" @onclick="CheckPrice" Label="@_localizer["Check Price"]" Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PriceCheck" />
+    <MudFab Class="pr-5 mr-15" @onclick="AddNewProduct" Label="@_localizer["Add New Product"]" Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PriceCheck" />
+    <MudSpacer/>
+    <MudSpacer/>
+    <MudSpacer/>
+
+    <MudSelect Class="pl-4"  ValueChanged="OnCustomerSelected" T="Customer" Width= Label=@_localizer["Select Existing Customer"] Clearable>
         @foreach (var customer in existingCustomers)
         {
            <MudSelectItem T="Customer" Value="@customer">@GetCustomerDetails(customer)</MudSelectItem>       

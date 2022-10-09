@@ -8,7 +8,8 @@ namespace CafeErez.Shared.Model.Identity
 {
     public interface IUsersHandler
     {
-        Task<User> MapUserFromRequest(RegisterRequest registerRequest);
+        Task<User> MapUserFromRegisterRequest(RegisterRequest registerRequest);
+        Task<List<UserResponse>> MapUserFromAdminUsersRequest(List<User> users);
 
     }
 }

@@ -1,0 +1,25 @@
+﻿@using CafeErez.Shared.Infrastructure.Localization
+@inject Microsoft.Extensions.Localization.IStringLocalizer<MainBody> _localizer
+
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+    @_localizer["Welcome to Cafe Erez"]
+    <MudSpacer />
+
+    <MudText style="font-size:larger; color:antiquewhite"  Href="authentication/profile">Hello @FirstName,</MudText>
+    <MudButton style="color:antiquewhite" Text="@_localizer["Logout"]" Icon="@Icons.Material.Filled.Logout" OnClick="Logout">Logout</MudButton>
+    <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
+        @foreach (var language in LocalizationConstants.SupportedLanguages)
+        {
+            <MudMenuItem OnClick="(()=> ChangeLanguageAsync(language))">@_localizer[language.DisplayName]</MudMenuItem>
+        }
+    </MudMenu>
+</MudAppBar>
+<MudDrawer @bind-Open="@_drawerOpen"  ClipMode="DrawerClipMode.Always">
+    <NavMenu/>
+</MudDrawer>
+<MudMainContent>
+    <MudContainer >
+        @ChildContent
+    </MudContainer>
+</MudMainContent>

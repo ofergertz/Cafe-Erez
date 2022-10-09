@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Mappers
 {
-    public class UserMapper : IMapper<RegisterRequest, User>
+    public class UserMapper : IMapper<RegisterRequest, User>,
+                              IMapper<List<User>,List<UserResponse>>
+                            
     {
         public User Map(RegisterRequest registerRequest)
         {
@@ -25,6 +27,26 @@ namespace Infrastructure.Mappers
             user.EmailConfirmed = true;
             user.PhoneNumberConfirmed = true;
             return user;                 
+        }
+
+        public List<UserResponse> Map(List<User> source)
+        {
+            var usersResponse = new List<UserResponse>();
+            foreach (var user in source)
+            {
+                var userResponse = new UserResponse();
+                userResponse.Id = user.Id;
+                userResponse.FirstName = user.FirstName;
+                userResponse.LastName = user.LastName;               
+                userResponse.UserName = user.UserName;
+                userResponse.Email = user.Email;
+                userResponse.EmailConfirmed = user.EmailConfirmed;
+                userResponse.PhoneNumber = user.PhoneNumber;
+                userResponse.ProfilePictureData = user.ProfilePictureDataUrl;
+                usersResponse.Add(userResponse);
+            }
+
+            return usersResponse;
         }
     }
 }

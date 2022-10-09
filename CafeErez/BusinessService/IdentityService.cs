@@ -67,7 +67,7 @@ namespace BusinessService
                 return await ServiceWrapper<RegisterResponse>.FailAsync(string.Format(_localizer["Username {0} is already taken."], registerRequest.UserName));
             }
 
-            var user = await _userHandler.MapUserFromRequest(registerRequest);
+            var user = await _userHandler.MapUserFromRegisterRequest(registerRequest);
 
             if (!string.IsNullOrWhiteSpace(registerRequest.PhoneNumber))
             {

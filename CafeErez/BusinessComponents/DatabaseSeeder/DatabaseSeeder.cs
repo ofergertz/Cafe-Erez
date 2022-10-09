@@ -2,6 +2,7 @@
 using CafeErez.Shared.Constants;
 using CafeErez.Shared.Model.Customer;
 using CafeErez.Shared.Model.Identity;
+using CafeErez.Shared.Model.Product;
 using CafeErez.Shared.Model.Seeder;
 using DAL.Connectivity;
 using Microsoft.AspNetCore.Identity;
@@ -36,7 +37,22 @@ namespace BusinessComponents.DatabaseSeeder
             AddRole();
             AddCustomer();
             AddAdministrator();
+            AddProductWithPrice();
             _db.SaveChanges();
+        }
+
+        private void AddProductWithPrice()
+        {
+            if (_db.Products.Count() > 0)
+                return;
+
+            _db.Products.AddAsync(new Product()
+            {
+                AdditionalIdentifier = "",
+                Price = 5.0m,
+                ProductDescription = "Mixed Bamba Bisley",
+                ProductId = "7290106578692"
+            }).GetAwaiter().GetResult();
         }
 
         private void AddRole()

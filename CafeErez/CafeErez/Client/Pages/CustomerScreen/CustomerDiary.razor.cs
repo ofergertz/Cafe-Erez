@@ -1,5 +1,6 @@
 ﻿using CafeErez.Client.Shared.Extensions;
 using CafeErez.Shared.Model.Customer;
+using CafeErez.Shared.Model.Product;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -10,20 +11,30 @@ namespace CafeErez.Client.Pages.CustomerScreen
         private List<Customer> customers = new List<Customer>();
         private List<Customer> existingCustomers = new List<Customer>();
         private string searchString = "";
+        private Product ProductFromPriceQuery = new();
         private List<Tuple<Customer,CustomerDebts>> customerDebts = new List<Tuple<Customer, CustomerDebts>>();
 
         protected override async Task OnInitializedAsync()
         {
             existingCustomers = await GetCustomers();
             var cust = existingCustomers.ToList().Select(x => x).Where(x => x.CustomerDebts.Any()).ToList();
-            customers = cust.Where(x => x.CustomerDebts.Any(y => DateTime.Compare(y.ActionDate.Date, DateTime.UtcNow.ToLocalTime().Date) == 0)).ToList();
-			foreach (var customer in customers)
+			foreach (var customer in cust)
 			{
-                foreach (var debt in customer.CustomerDebts)
+                foreach (var debt in customer.CustomerDebts.Where(x =>x.ActionDate.Date.ToShortDateString() == DateTime.Now.Date.ToShortDateString()))
                 {
                     customerDebts.Add(new Tuple<Customer, CustomerDebts>(customer, debt));
                 }
             }
+        }
+
+        private bool GetDebtByDate(Customer x)
+        {
+            foreach (var item in x.CustomerDebts)
+            {
+                Console.WriteLine(item.ActionDate.Date.ToShortDateString());
+            }
+
+            return x.CustomerDebts.Any(y => y.ActionDate.Date.ToShortDateString()==DateTime.Now.Date.ToShortDateString());
         }
 
         protected void FilterChanged(ChangeEventArgs args)
@@ -67,6 +78,31 @@ namespace CafeErez.Client.Pages.CustomerScreen
             if (result.Cancelled)
                 return;
             await AddCustomer(result.Data as Customer);
+        }
+
+        private async Task CheckPrice()
+        {
+            var options = new DialogOptions { CloseButton = false, MaxWidth = MaxWidth.Large, FullWidth = true, DisableBackdropClick = true };
+
+            var dialog = _dialogService.Show<Shared.Dialogs.CheckProductPriceDialog>("Price Query", options);
+            var result = await dialog.Result;
+            return;
+        }
+
+        private async Task AddNewProduct()
+        {
+            var options = new DialogOptions { CloseButton = false, MaxWidth = MaxWidth.Large, FullWidth = true, DisableBackdropClick = true };
+
+            var dialog = _dialogService.Show<Shared.Dialogs.AddNewProductDialog>("Price Query", options);
+            var result = await dialog.Result;
+            if (result.Cancelled)
+                return;
+
+            var newProduct = result.Data as Product ;
+            if (newProduct == null)
+                return; 
+
+            await _productHandler.AddNewProduct(newProduct);
         }
 
         private async Task UpdateCustomer(Customer customer)
@@ -118,9 +154,22 @@ namespace CafeErez.Client.Pages.CustomerScreen
             return user.GetUserId();
         }
 
-        private static int CalculateTotalDebts(Customer customer)
+        private static decimal CalculateTotalDebts(Customer customer)
         {
-            return customer.CustomerDebts.Sum(x => int.Parse(x.ActionAmount));
+            var refundDebts = CalculateDebtForRefund(customer);
+            var otherDebts = CalculateDebtForOthers(customer);
+            return otherDebts - refundDebts;
+        }
+
+        private static decimal CalculateDebtForRefund(Customer customer)
+        {
+            return customer.CustomerDebts.Where(x => x.Action.Equals("Refund")).Sum(x => decimal.Parse(x.ActionAmount));
+            //decimal.Parse(y.ActionAmount)).Sum());
+        }
+
+        private static decimal CalculateDebtForOthers(Customer customer)
+        {
+            return customer.CustomerDebts.Where(x => !x.Action.Equals("Refund")).Sum(x => decimal.Parse(x.ActionAmount));
         }
 
         private async Task AddCustomer(Customer customer)

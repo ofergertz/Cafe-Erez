@@ -19,10 +19,20 @@ namespace CafeErez.Shared.Constants
             public static string Preference = "clientPreference";
 
             public static string AuthToken = "authToken";
-            public static string RefreshToken = "refreshToken";
             public static string UserImageURL = "userImageURL";
         }
 
+        public static class Products
+        {
+            public static string PriceQuery(string ProductId)
+            {
+                return $"api/products/PriceQuery/{ProductId}";
+            }
+
+            public const string AddProduct = "api/products/AddProduct";
+
+
+        }
         public static class Customers
         {
             public const string GetCustomers = "api/customer/GetCustomers";
@@ -43,11 +53,13 @@ namespace CafeErez.Shared.Constants
         public static class Users
         {
             public const string DefaultPassword = "Aa123456!";
+            public const string GetAllUsers = "api/identity/user";
         }
 
         public static class StorageConstants
         {
             public const string LocalPreference = "LocalPreference";
+            public const string IsRtl = "IsRtl";
         }
 
     }

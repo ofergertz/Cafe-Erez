@@ -79,6 +79,20 @@ namespace Infrastructure.Authentication
                     keyValuePairs.Remove(ClaimTypes.Role);
                 }
 
+                keyValuePairs.TryGetValue("exp", out var expiration);
+                if (expiration.ToString().Trim().StartsWith("["))
+                {
+                    var parsedExpiration = JsonSerializer.Deserialize<string[]>(expiration.ToString());
+
+                    claims.AddRange(parsedExpiration.Select(expiration => new Claim(ClaimTypes.Expiration, expiration)));
+                }
+                else
+                {
+                    claims.Add(new Claim(ClaimTypes.Expiration, expiration.ToString()));
+                }
+
+                keyValuePairs.Remove(ClaimTypes.Expiration);
+
                 claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
             }
             return claims;

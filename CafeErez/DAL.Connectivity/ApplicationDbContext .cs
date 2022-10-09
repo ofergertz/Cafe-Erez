@@ -2,6 +2,7 @@
 using CafeErez.Shared.Infrastructure.ConfigurationRepository;
 using CafeErez.Shared.Model.Customer;
 using CafeErez.Shared.Model.Identity;
+using CafeErez.Shared.Model.Product;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@ namespace DAL.Connectivity
         public DbSet<User> User { get; set; }
         public DbSet<Customer> Customer { get; set; }
         public DbSet<CustomerDebts> CustomerDebts { get; set; }
-       // public DbSet<CustomerDiary> CustomerDiary { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

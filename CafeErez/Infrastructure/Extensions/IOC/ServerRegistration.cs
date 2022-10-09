@@ -2,7 +2,9 @@
 using BusinessComponents.Identity;
 using BusinessService;
 using BusinessService.Customer;
+using BusinessService.Products;
 using CafeErez.Shared.BusinessService;
+using CafeErez.Shared.BusinessService.Products;
 using CafeErez.Shared.Infrastructure;
 using CafeErez.Shared.Model.Identity;
 using CafeErez.Shared.Model.Seeder;
@@ -17,10 +19,13 @@ namespace Infrastructure.Extensions.IOC
         {
             builder.AddTransient<IServiceWrapper, ServiceWrapper>();
             builder.AddTransient<IIdentityService, IdentityService>();
+            builder.AddTransient<IUserService, UserService>();
             builder.AddTransient<IUsersHandler, UsersHandler>();
             builder.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
             builder.AddTransient<IMapper<CafeErez.Shared.Model.Identity.RegisterRequest, User>, UserMapper>();
+            builder.AddTransient<IMapper<List<User>, List<UserResponse>>, UserMapper>();
             builder.AddTransient<ICustomerService, CustomerService>();
+            builder.AddTransient<IProductService, ProductService>();
         }
     }
 }

@@ -16,10 +16,16 @@ namespace BusinessComponents.Identity
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<User> MapUserFromRequest(RegisterRequest registerRequest)
+        public async Task<User> MapUserFromRegisterRequest(RegisterRequest registerRequest)
         {
             var mapper = (IMapper<RegisterRequest, User>)_serviceProvider.GetService(typeof(IMapper<RegisterRequest, User>));
             return mapper.Map(registerRequest);
+        }
+
+        public async Task<List<UserResponse>> MapUserFromAdminUsersRequest(List<User> users)
+        {
+            var mapper = (IMapper<List<User>, List<UserResponse>>)_serviceProvider.GetService(typeof(IMapper<RegisterRequest, User>));
+            return mapper.Map(users);
         }
     }
 }

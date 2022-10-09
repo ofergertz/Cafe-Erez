@@ -1,0 +1,62 @@
+﻿@using CafeErez.Shared.Model.Product
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CheckProductPriceDialog> _localizer
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.PriceCheck" Class="mr-3 mb-n1" />
+            @_localizer["Check Product Price"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField OnInternalInputChanged=Clear TextChanged=FireProductSearch AutoFocus="true" HelperTextOnFocus="true" @bind-Value="BarcodeScanned" Label="ProductBarcode" Variant="Variant.Text" />
+        @if(ProductResult != null && !ProductNotFoundFromService)
+        {
+            <MudText> @ProductResult.ProductDescription Price is: @ProductResult.Price </MudText>
+        }
+        else{
+            if(ProductResult == null && ProductNotFoundFromService)
+            {
+                 <MudText> ProductId @BarcodeScanned was not found </MudText>
+            }
+            else 
+            {
+                <MudText> </MudText>
+            }
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Submit">@_localizer["Ok"]</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    public string BarcodeScanned { get; set; }
+    public Product ProductResult { get; set; }
+    public bool ProductNotFoundFromService = false;
+
+    void Clear()
+    {
+                BarcodeScanned = string.Empty;
+    }
+    void Submit()
+    {
+        MudDialog.Close(BarcodeScanned);
+        ProductResult = null;
+        BarcodeScanned = string.Empty;
+    }
+
+    async Task FireProductSearch()
+    {
+        ProductNotFoundFromService = false;
+        ProductResult = null;
+        var product = await _productHandler.PriceQuery(BarcodeScanned);
+        if (product != null)
+            ProductResult = product.Data;
+        else
+        {
+            ProductNotFoundFromService = true;
+            ProductResult = null;
+        }
+    }
+}
