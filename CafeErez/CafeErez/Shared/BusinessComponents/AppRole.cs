@@ -4,6 +4,8 @@ namespace CafeErez.Shared.BusinessComponents
 {
     public class AppRole : IdentityRole
     {
-        public AppRole() { }
+        public string Description { get; set; }
+
+        public AppRole() : base() { }
     }
 }

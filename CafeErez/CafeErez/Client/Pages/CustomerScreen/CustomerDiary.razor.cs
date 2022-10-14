@@ -82,7 +82,7 @@ namespace CafeErez.Client.Pages.CustomerScreen
 
         private async Task CheckPrice()
         {
-            var options = new DialogOptions { CloseButton = false, MaxWidth = MaxWidth.Large, FullWidth = true, DisableBackdropClick = true };
+            var options = new DialogOptions { CloseButton = false, MaxWidth = MaxWidth.ExtraExtraLarge, DisableBackdropClick = true };
 
             var dialog = _dialogService.Show<Shared.Dialogs.CheckProductPriceDialog>("Price Query", options);
             var result = await dialog.Result;

@@ -49,6 +49,9 @@ namespace CafeErez.Shared.Constants
         {
             public const string BasicRole = "Basic";
             public const string AdministratorRole = "Administrator";
+            public const string GetAll = "api/identity/roleClaim/GetAllRoles";
+            public const string SaveRole = "api/identity/roleClaim/SaveRole";
+            public const string DeleteRole = "api/identity/roleClaim/DeleteRole";
         }
         public static class Users
         {

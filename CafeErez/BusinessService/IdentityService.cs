@@ -86,6 +86,7 @@ namespace BusinessService
             await _userManager.AddToRoleAsync(user, Constants.Roles.BasicRole);
             return await ServiceWrapper<RegisterResponse>.SuccessAsync(CreateRegisterResponse(user));
         }
+       
         private LoginResponse CreateLoginResponse(User user, LoginRequest loginRequest)
         {
             var response = new LoginResponse();

@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Components.Authorization;
 using Blazored.LocalStorage;
 using System.Linq;
+using static CafeErez.Shared.Constants.Constants;
 
 namespace Infrastructure.Authentication
 {
@@ -21,12 +22,20 @@ namespace Infrastructure.Authentication
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var savedToken = await _localStorage.GetItemAsync<string>("authToken");
-            var claims = ParseClaimsFromJwt(savedToken);
-            if (string.IsNullOrWhiteSpace(savedToken) || !IsValidToken(claims))
+            
+            if (string.IsNullOrWhiteSpace(savedToken))
             {
                 return new AuthenticationState(new ClaimsPrincipal(
                     new ClaimsIdentity()));
             }
+
+            var claims = ParseClaimsFromJwt(savedToken);
+            if (!IsValidToken(claims))
+            {
+                return new AuthenticationState(new ClaimsPrincipal(
+                    new ClaimsIdentity()));
+            }
+
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
 
             /// A Claim is a statement about an entity by an Issuer.
@@ -57,10 +66,23 @@ namespace Infrastructure.Authentication
 
         public void MarkUserAsAuthenticated(string UserName)
         {
-            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, UserName) }, "apiauth"));
-            var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+            var authState = GetAuthenticationState(UserName);
             NotifyAuthenticationStateChanged(authState);
         }
+
+        private async Task<AuthenticationState> GetAuthenticationState(string UserName)
+        {
+            var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+            if (string.IsNullOrWhiteSpace(savedToken))
+            {
+                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            }
+
+            var authState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
+
+            return authState;
+        }
+
         public void MarkUserAsLoggedOut()
         {
             var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());

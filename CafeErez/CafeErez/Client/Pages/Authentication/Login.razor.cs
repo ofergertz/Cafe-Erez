@@ -34,11 +34,18 @@ namespace CafeErez.Client.Pages.Authentication
             }
         }
 
-        private async Task Fill()
+        private async Task FillAdmin()
         {
             _loginRequest.Email = "ofer1g38@gmail.com";
             _loginRequest.Password = "Aa123456!";
         }
+
+        private async Task FillBasic()
+        {
+            _loginRequest.Email = "miki1g@gmail.com";
+            _loginRequest.Password = "Aa123456!";
+        }
+
         private async Task SubmitAsync()
         {
             var result = await _authenticationManager.Login(_loginRequest);

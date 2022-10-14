@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Blazored.LocalStorage;
+using System.Security.Claims;
 
 namespace Infrastructure.Authentication
 {
@@ -22,6 +23,12 @@ namespace Infrastructure.Authentication
             _httpClient = httpClient;
             _localStorage = localStorage;
             _authenticationStateProvider = authenticationStateProvider;
+        }
+
+        public async Task<ClaimsPrincipal> CurrentUser()
+        {
+            var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
+            return state.User;
         }
 
         public async Task<IServiceWrapper<LoginResponse>> Login(LoginRequest loginRequest)

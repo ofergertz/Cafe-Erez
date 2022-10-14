@@ -1,6 +1,10 @@
-﻿using CafeErez.Shared.Model.Identity;
+﻿using BusinessService.Reports;
+using CafeErez.Client.Pages.Reports;
+using CafeErez.Shared.Model.Identity;
+using Infrastructure.Extensions;
 using Microsoft.JSInterop;
 using MudBlazor;
+using System.Buffers.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Claims;
 
@@ -46,27 +50,26 @@ namespace CafeErez.Client.Pages.Identity
 
         private async Task ExportToPDF()
         {
-            byte [] base64= convert(_userList);
-            await JSRuntime.InvokeVoidAsync("Download", new
-            {
-                ByteArray = base64,
-                FileName = $"{nameof(Users).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.pdf",
-                MimeType = "application/pdf"
-            });
-            _snackBar.Add(string.IsNullOrWhiteSpace(_searchString)
-                ? _localizer["Users exported"]
-                : _localizer["Filtered Users exported"], Severity.Success);
+            var pdfDocument = _pdfService.CreatePdf(_userList);
 
-        }
-
-        private static byte[] convert(List<UserResponse> _userList)
-        {
-            var bf = new BinaryFormatter();
-            using (var ms = new MemoryStream())
+            try
             {
-                bf.Serialize(ms, _userList);
-                return ms.ToArray();
+                await JSRuntime.InvokeAsync<byte[]>(
+                "downloadFromByteArray",
+                new
+                {
+                    ByteArray = pdfDocument.ToArray(),
+                    FileName = "CustomersList.pdf",
+                    ContentType = "application/pdf"
+                });
             }
+            catch (Exception ex)
+            {
+                _snackBar.Add(_localizer["Users exported Failed"], Severity.Error);
+                return;
+            }
+
+            _snackBar.Add(_localizer["Users exported Success"], Severity.Success);
         }
 
         private bool Search(UserResponse user)

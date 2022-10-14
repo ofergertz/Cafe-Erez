@@ -6,13 +6,13 @@ namespace CafeErez.Client.Shared
     {
         const string SportResults = "https://www.flashscore.com";
 
-        const string LottoResult = "https://www.flashscore.com";
+        const string LottoResult = "https://www.pais.co.il/lotto/archive.aspx";
 
-        const string Pais123Result = "https://www.flashscore.com";
+        const string Pais123Result = "https://www.pais.co.il/123/archive.aspx";
 
-        const string Pais777Result = "https://www.flashscore.com";
+        const string Pais777Result = "https://www.pais.co.il/777/archive.aspx";
 
-        const string ChanceResult = "https://www.flashscore.com";
+        const string ChanceResult = "https://www.pais.co.il/chance/archive.aspx";
 
         const string Winner = "http://www.winner.co.il";
 

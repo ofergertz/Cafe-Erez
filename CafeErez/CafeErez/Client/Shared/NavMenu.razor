@@ -1,4 +1,8 @@
-﻿<MudNavMenu>
+﻿@using CafeErez.Shared.Constants
+<MudNavMenu>
+    <MudNavLink Href="/CustomerDiary" Icon="@Icons.Material.Outlined.Home">
+        Home
+    </MudNavLink>
     <MudNavGroup Icon="@Icons.Material.Outlined.Score" Title="Winner" Expanded="true">
         <MudStack Class="pa-2" Row="true" Justify="Justify.Center">
             <MudAvatar Image="images/WinnerHome.jpg"></MudAvatar>
@@ -28,8 +32,13 @@
            <MudButton FullWidth="true" @onclick="() => DirectTo(ChanceResult)">Chance result</MudButton>
         </MudStack>
     </MudNavGroup>
-    <MudListSubheader Class="mt-2 mb-n2">Administrator</MudListSubheader>
-    <MudNavLink Href="/identity/users" Icon="@Icons.Material.Outlined.Person">
-        Users
-    </MudNavLink>
+   <AuthorizeView Roles=@Constants.Roles.AdministratorRole>
+        <MudListSubheader Class="mt-2 mb-n2">Administrator</MudListSubheader>
+        <MudNavLink Href="/identity/users" Icon="@Icons.Material.Outlined.Person">
+            Users
+        </MudNavLink>
+        <MudNavLink Href="/identity/Roles" Icon="@Icons.Material.Outlined.Person">
+            Roles
+        </MudNavLink>
+   </AuthorizeView>
 </MudNavMenu>

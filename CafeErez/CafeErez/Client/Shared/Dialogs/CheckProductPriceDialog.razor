@@ -1,6 +1,6 @@
 ﻿@using CafeErez.Shared.Model.Product
 @inject Microsoft.Extensions.Localization.IStringLocalizer<CheckProductPriceDialog> _localizer
-<MudDialog>
+<MudDialog Style="width: 500px; height: 200px;">
     <TitleContent>
         <MudText Typo="Typo.h6">
             <MudIcon Icon="@Icons.Material.Filled.PriceCheck" Class="mr-3 mb-n1" />
@@ -11,7 +11,7 @@
         <MudTextField OnInternalInputChanged=Clear TextChanged=FireProductSearch AutoFocus="true" HelperTextOnFocus="true" @bind-Value="BarcodeScanned" Label="ProductBarcode" Variant="Variant.Text" />
         @if(ProductResult != null && !ProductNotFoundFromService)
         {
-            <MudText> @ProductResult.ProductDescription Price is: @ProductResult.Price </MudText>
+            <MudText style="font-size:larger;color:#ff0000"> @ProductResult.ProductDescription Price is: @ProductResult.Price </MudText>
         }
         else{
             if(ProductResult == null && ProductNotFoundFromService)
@@ -25,7 +25,8 @@
         }
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Submit">@_localizer["Ok"]</MudButton>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Submit">@_localizer["Close"]</MudButton>
+        <MudButton Color="Color.Info" Variant="Variant.Filled" OnClick="FireProductSearch">@_localizer["Search"]</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
@@ -37,7 +38,7 @@
 
     void Clear()
     {
-                BarcodeScanned = string.Empty;
+        BarcodeScanned = string.Empty;
     }
     void Submit()
     {
@@ -50,6 +51,11 @@
     {
         ProductNotFoundFromService = false;
         ProductResult = null;
+        if(string.IsNullOrEmpty(BarcodeScanned)){
+            ProductResult = null;
+            return;
+        }
+
         var product = await _productHandler.PriceQuery(BarcodeScanned);
         if (product != null)
             ProductResult = product.Data;

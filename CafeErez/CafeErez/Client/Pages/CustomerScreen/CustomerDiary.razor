@@ -1,10 +1,13 @@
 ﻿@page "/CustomerDiary"
+@using CafeErez.Shared.Constants
 @inject Microsoft.Extensions.Localization.IStringLocalizer<CustomerDiary> _localizer
 
 <MudStack Class="pa-3 ma-3" AlignItems="AlignItems.Start"  Row="true">
     <MudFab Class="pr-5 mr-15" @onclick="AddAction" Label="@_localizer["Add Action"]" Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" />
     <MudFab Class="pr-5 mr-15" @onclick="CheckPrice" Label="@_localizer["Check Price"]" Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PriceCheck" />
-    <MudFab Class="pr-5 mr-15" @onclick="AddNewProduct" Label="@_localizer["Add New Product"]" Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PriceCheck" />
+    <AuthorizeView Roles=@Constants.Roles.AdministratorRole>
+        <MudFab Class="pr-5 mr-15" @onclick="AddNewProduct" Label="@_localizer["Add New Product"]" Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PriceCheck" />
+    </AuthorizeView>
     <MudSpacer/>
     <MudSpacer/>
     <MudSpacer/>

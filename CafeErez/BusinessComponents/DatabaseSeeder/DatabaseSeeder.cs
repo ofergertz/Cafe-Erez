@@ -37,6 +37,7 @@ namespace BusinessComponents.DatabaseSeeder
             AddRole();
             AddCustomer();
             AddAdministrator();
+            AddBasicUser();
             AddProductWithPrice();
             _db.SaveChanges();
         }
@@ -61,6 +62,7 @@ namespace BusinessComponents.DatabaseSeeder
             {
                 var adminRole = new AppRole();
                 adminRole.Name = Constants.Roles.AdministratorRole;
+                adminRole.Description = "Administrator role with full permissions";
                 var adminRoleInDb = await _roleManager.FindByNameAsync(Constants.Roles.AdministratorRole);
                 if (adminRoleInDb == null)
                 {
@@ -70,6 +72,7 @@ namespace BusinessComponents.DatabaseSeeder
 
                 var basicRole = new AppRole();
                 basicRole.Name = Constants.Roles.BasicRole;
+                basicRole.Description = "Basic role with default permissions";
 
                 var basicRoleInDb = await _roleManager.FindByNameAsync(Constants.Roles.BasicRole);
                 if (basicRoleInDb == null)
@@ -118,6 +121,38 @@ namespace BusinessComponents.DatabaseSeeder
                 {
                     await _userManager.CreateAsync(superUser, Constants.Users.DefaultPassword);
                     var result = await _userManager.AddToRoleAsync(superUser, Constants.Roles.AdministratorRole);
+                    if (!result.Succeeded)
+                        foreach (var error in result.Errors)
+                        {
+                            _logger.LogError(error.Description);
+                        }
+                }
+            }).GetAwaiter().GetResult();
+        }
+
+        private void AddBasicUser()
+        {
+            Task.Run(async () =>
+            {
+                //Check if User Exists
+                var basicUser = new User
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    FirstName = "Basic",
+                    LastName = "Basic",
+                    Email = "miki1g@gmail.com",
+                    UserName = "mikig1951",
+                    NormalizedUserName = normalizer.NormalizeEmail("mikig1951"),
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    NormalizedEmail = normalizer.NormalizeEmail("miki1g@gmail.com"),
+                    PhoneNumber = "0507500317",
+                };
+                var basicUserInDb = await _userManager.FindByEmailAsync(basicUser.Email);
+                if (basicUserInDb == null)
+                {
+                    await _userManager.CreateAsync(basicUser, Constants.Users.DefaultPassword);
+                    var result = await _userManager.AddToRoleAsync(basicUser, Constants.Roles.BasicRole);
                     if (!result.Succeeded)
                         foreach (var error in result.Errors)
                         {
