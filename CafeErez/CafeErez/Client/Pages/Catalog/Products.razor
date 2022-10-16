@@ -1,0 +1,57 @@
+﻿@page "/catalog/products"
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Products> _localizer
+@using System.ComponentModel.Design
+@using CafeErez.Shared.BusinessService.Roles
+@using CafeErez.Shared.Model.Product
+
+<style>
+    .mud-table-container {
+        overflow: auto;
+    }
+</style>
+
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-5">@_localizer["Catalog"]</MudText>
+<MudText Color="Color.Surface" Class="mb-4">@_localizer["Manage Catalog."]</MudText>
+
+@if (!_loaded)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudTable Hover="true" Elevation="25" Items="_productsList" Filter="new Func<Product, bool>(Search)" @bind-product="_product">
+        <ToolBarContent>
+            <div class="justify-center mud-text-align-center">
+                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="ExportToPDF" StartIcon="@Icons.Custom.FileFormats.FilePdf" IconColor="Color.Secondary" Color="Color.Surface" Style="margin-left: 5px;">@_localizer["Export"]</MudButton>
+                    <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeCreateOrEditRoleModal())" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@_localizer["Create"]</MudButton>
+                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetProductsAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary">@_localizer["Reload"]</MudButton>
+            </div>
+            <MudSpacer />
+            <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="@_localizer["Search for Roles..."]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<Product, object>(x => x.ProductId)">@_localizer["Product Id"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Product, object>(x => x.Price)">@_localizer["Price"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Product, object>(x => x.ProductDescription)">@_localizer["Product Description"]</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right">@_localizer["Actions"]</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.ProductId</MudTd>
+            <MudTd DataLabel="@_localizer["Product Description"]">
+                    <MudHighlighter Text="@context.ProductDescription" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Product Price"]">
+                <MudHighlighter Text="@context.Price.ToString()" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@_localizer["Actions"]" Style="text-align: right">
+               
+                    <MudMenu Label="@_localizer["Actions"]" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
+
+                        <MudMenuItem @onclick="@(() => InvokeCreateOrEditRoleModal(@context.ProductId))">@_localizer["Edit"]</MudMenuItem>
+
+                    <MudMenuItem @onclick="@(() => Delete(@context.ProductId))">@_localizer["Delete"]</MudMenuItem>
+                    </MudMenu>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}

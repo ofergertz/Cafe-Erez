@@ -1,4 +1,5 @@
-﻿using CafeErez.Shared.BusinessService;
+﻿using BusinessService;
+using CafeErez.Shared.BusinessService;
 using CafeErez.Shared.Model.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,15 @@ namespace CafeErez.Server.Controllers
         {
             var users = await _userService.GetAllAsync();
             return Ok(users);
+        }
+
+
+        [HttpGet]
+        [Route("GetUser/{UserId}")]
+        public async Task<ActionResult> GetUser(string UserId)
+        {
+            var response = await _userService.GetUserAsync(UserId);
+            return Ok(response);
         }
     }
 }

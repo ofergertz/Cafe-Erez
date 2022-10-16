@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CafeErez.Shared.Constants.Constants;
 
 namespace BusinessService
 {
@@ -27,6 +28,13 @@ namespace BusinessService
             var users = await _userManager.Users.ToListAsync();
             var result = await _usersHandler.MapUserFromAdminUsersRequest(users);
             return await ServiceWrapper<List<UserResponse>>.SuccessAsync(result);
+        }
+
+        public async Task<IServiceWrapper<UserResponse>> GetUserAsync(string userID)
+        {
+            var user = await _userManager.FindByIdAsync(userID);
+            var result = await _usersHandler.MapUserToDto(user);
+            return await ServiceWrapper<UserResponse>.SuccessAsync(result);
         }
     }
 }

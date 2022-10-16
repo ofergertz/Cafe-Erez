@@ -28,6 +28,7 @@ namespace Infrastructure.Extensions.IOC
             builder.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
             builder.AddTransient<IMapper<CafeErez.Shared.Model.Identity.RegisterRequest, User>, UserMapper>();
             builder.AddTransient<IMapper<List<User>, List<UserResponse>>, UserMapper>();
+            builder.AddTransient<IMapper<User, UserResponse>, UserMapper>();
             builder.AddTransient<IMapper<List<AppRole>, List<RolesResponse>>, RolesMapper>();
             builder.AddTransient<IMapper<RoleRequest, AppRole>, RolesMapper>();
             builder.AddTransient<ICustomerService, CustomerService>();

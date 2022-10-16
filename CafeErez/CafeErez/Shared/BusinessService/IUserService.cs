@@ -10,5 +10,6 @@ namespace CafeErez.Shared.BusinessService
     public interface IUserService
     {
         Task<IServiceWrapper<List<UserResponse>>> GetAllAsync();
+        Task<IServiceWrapper<UserResponse>> GetUserAsync(string userID);
     }
 }

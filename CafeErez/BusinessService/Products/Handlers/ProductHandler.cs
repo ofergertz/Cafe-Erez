@@ -2,6 +2,7 @@
 using CafeErez.Shared.BusinessService.Products;
 using CafeErez.Shared.Constants;
 using CafeErez.Shared.Infrastructure;
+using CafeErez.Shared.Model.Customer;
 using CafeErez.Shared.Model.Product;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,18 @@ namespace BusinessService.Products.Handlers
         {
             var response = await _httpClient.PostAsJsonAsync(Constants.Products.AddProduct, Product);
             return await response.ToResult<Product>();
+        }
+
+        public async Task<IServiceWrapper<string>> DeleteAsync(string ProductId)
+        {
+            var response = await _httpClient.DeleteAsync($"{Constants.Products.Delete}/{ProductId}");
+            return await response.ToResult<string>();
+        }
+
+        public async Task<IServiceWrapper<List<Product>>> GetAllProducts()
+        {
+            var response = await _httpClient.GetAsync(Constants.Products.GetAll);
+            return await response.ToResult<List<Product>>();
         }
 
         public async Task<IServiceWrapper<Product>> PriceQuery(string ProductId)

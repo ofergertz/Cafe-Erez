@@ -18,9 +18,10 @@
 }
 else
 {
-    <MudTable Hover="true" Elevation="25" Items="_roleList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<RoleResponse, bool>(Search)" @bind-role="_role">
+    <MudTable Hover="true" Elevation="25" Items="_roleList" Filter="new Func<RoleResponse, bool>(Search)" @bind-role="_role">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
+                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="ExportToPDF" StartIcon="@Icons.Custom.FileFormats.FilePdf" IconColor="Color.Secondary" Color="Color.Surface" Style="margin-left: 5px;">@_localizer["Export"]</MudButton>
                     <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeCreateOrEditRoleModal())" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@_localizer["Create"]</MudButton>
                     <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetRolesAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary">@_localizer["Reload"]</MudButton>
             </div>
@@ -51,5 +52,8 @@ else
                     </MudMenu>
             </MudTd>
         </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{10,15,20}" />
+        </PagerContent>
     </MudTable>
 }

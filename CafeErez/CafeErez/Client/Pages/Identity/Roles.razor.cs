@@ -3,6 +3,7 @@ using CafeErez.Shared.Model.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.JSInterop;
 using MudBlazor;
 using System.Security.Claims;
 
@@ -15,9 +16,6 @@ namespace CafeErez.Client.Pages.Identity
         private List<RoleResponse> _roleList = new();
         private RoleResponse _role = new();
         private string _searchString = "";
-        private bool _dense = false;
-        private bool _striped = true;
-        private bool _bordered = false;
 
         private ClaimsPrincipal _currentUser;
         private bool _loaded;
@@ -72,6 +70,30 @@ namespace CafeErez.Client.Pages.Identity
                     }
                 }
             }
+        }
+
+        private async Task ExportToPDF()
+        {
+            var pdfDocument = _pdfService.CreatePdf(_roleList);
+
+            try
+            {
+                await JSRuntime.InvokeAsync<byte[]>(
+                "downloadFromByteArray",
+                new
+                {
+                    ByteArray = pdfDocument.ToArray(),
+                    FileName = "Roles.pdf",
+                    ContentType = "application/pdf"
+                });
+            }
+            catch (Exception ex)
+            {
+                _snackBar.Add(_localizer["Users exported Failed"], Severity.Error);
+                return;
+            }
+
+            _snackBar.Add(_localizer["Users exported Success"], Severity.Success);
         }
 
         private async Task InvokeCreateOrEditRoleModal(string id = null)

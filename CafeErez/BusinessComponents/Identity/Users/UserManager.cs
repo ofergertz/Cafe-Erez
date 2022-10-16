@@ -2,22 +2,28 @@
 using CafeErez.Shared.Constants;
 using CafeErez.Shared.Infrastructure;
 using CafeErez.Shared.Model.Identity;
-using Microsoft.AspNetCore.Identity;
+using CafeErez.Shared.Model.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Identity
+namespace BusinessComponents.Identity.Users
 {
-    public class ApplicationUserManager : IApplicationUserManager
+    public class UserManager : IUserManager
     {
         private readonly HttpClient _httpClient;
 
-        public ApplicationUserManager(HttpClient httpClient)
+        public UserManager(HttpClient httpClient)
         {
             _httpClient = httpClient;
+        }
+
+        public async Task<IServiceWrapper<UserResponse>> GetUserAsync(string userId)
+        {
+            var response = await _httpClient.GetAsync($"{Constants.Users.GetUser}/{userId}");
+            return await response.ToResult<UserResponse>();
         }
 
         public async Task<IServiceWrapper<List<UserResponse>>> GetAllUsersAsync()

@@ -24,11 +24,27 @@ namespace CafeErez.Server.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("GetAll")]
+        public async Task<ActionResult> GetAll()
+        {
+            var response = await _productService.GetAllProducts();
+            return Ok(response);
+
+        }
+
+        [HttpDelete("Delete/{productId}")]
+        public async Task<IActionResult> DeleteRole(string productId)
+        {
+            var response = await _productService.DeleteAsync(productId);
+            return Ok(response);
+        }
+
         [HttpPost]
         [Route("AddProduct")]
         public async Task<ActionResult> AddProduct(Product NewProduct)
         {
-            var response = await _productService.AddNewProduct(NewProduct);
+            var response = await _productService.AddOrEditProduct(NewProduct);
             return Ok(response);
         }
     }

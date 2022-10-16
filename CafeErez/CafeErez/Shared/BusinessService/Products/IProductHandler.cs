@@ -11,5 +11,7 @@ namespace CafeErez.Shared.BusinessService.Products
     {
         Task<IServiceWrapper<Product>> PriceQuery(string ProductId); 
         Task<IServiceWrapper<Product>> AddNewProduct(Product Product); 
+        Task<IServiceWrapper<List<Product>>> GetAllProducts(); 
+        Task<IServiceWrapper<string>> DeleteAsync(string ProductId); 
     }
 }

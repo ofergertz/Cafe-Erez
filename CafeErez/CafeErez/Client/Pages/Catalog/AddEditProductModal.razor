@@ -1,0 +1,52 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<AddEditProductModal> _localizer
+
+<EditForm Model="@AddEditProductModel" OnValidSubmit="SaveAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+    <MudDialog>
+        <TitleContent>
+            @{
+                if (string.IsNullOrEmpty(AddEditProductModel.ProductId))
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                        @_localizer["Add Product"]
+                    </MudText>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+                        @_localizer["Update Product"]
+                    </MudText>
+                }
+            }
+        </TitleContent>
+        <DialogContent>
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudTextField For="@(() => AddEditProductModel.ProductId)" @bind-Value="AddEditProductModel.ProductId" Label="@_localizer["Product Id"]" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField For="@(() => AddEditProductModel.Price)" @bind-Value="AddEditProductModel.Price" Label="@_localizer["Price"]" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField For="@(() => AddEditProductModel.ProductDescription)" @bind-Value="AddEditProductModel.ProductDescription" Label="@_localizer["Product Description"]" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField For="@(() => AddEditProductModel.AdditionalIdentifier)" @bind-Value="AddEditProductModel.AdditionalIdentifier" Label="@_localizer["Additional Identifier"]" />
+                </MudItem>               
+            </MudGrid>
+        </DialogContent>
+        <DialogActions>
+            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">@_localizer["Cancel"]</MudButton>
+            @if (!string.IsNullOrEmpty(AddEditProductModel.ProductId))
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Secondary">@_localizer["Update"]</MudButton>
+            }
+            else
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Success">@_localizer["Save"]</MudButton>
+            }
+        </DialogActions>
+    </MudDialog>
+</EditForm>

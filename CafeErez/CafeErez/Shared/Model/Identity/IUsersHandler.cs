@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CafeErez.Shared.BusinessService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace CafeErez.Shared.Model.Identity
     {
         Task<User> MapUserFromRegisterRequest(RegisterRequest registerRequest);
         Task<List<UserResponse>> MapUserFromAdminUsersRequest(List<User> users);
+        Task<UserResponse> MapUserToDto(User user);
 
     }
 }

@@ -30,6 +30,8 @@ namespace CafeErez.Shared.Constants
             }
 
             public const string AddProduct = "api/products/AddProduct";
+            public const string GetAll = "api/products/GetAll";
+            public const string Delete = "api/products/Delete";
 
 
         }
@@ -57,6 +59,7 @@ namespace CafeErez.Shared.Constants
         {
             public const string DefaultPassword = "Aa123456!";
             public const string GetAllUsers = "api/identity/user";
+            public const string GetUser = "api/identity/user/GetUser";
         }
 
         public static class StorageConstants
